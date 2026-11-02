@@ -147,18 +147,26 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .hero-foot {
   display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(24px, 5vw, 80px);
-  padding: clamp(32px, 5vw, 64px) 0 clamp(48px, 7vw, 96px);
+  padding: clamp(56px, 8vw, 120px) 0;
 }
 .intro-name { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 20px; }
 .intro-name small { display: block; font-family: var(--f-en); font-size: .42em; font-weight: 500; letter-spacing: 0; color: var(--ink-2); margin-top: 8px; }
 .intro p { margin: 0; max-width: 34em; color: var(--ink-2); }
+/* About · Contents: 같은 제목, 같은 높이, 내용은 아래 정렬 */
+.intro, .contents { display: flex; flex-direction: column; }
+.intro .intro-name { margin-top: auto; }
+.hero-foot .col-head {
+  font-family: var(--f-en); font-weight: 900; font-size: var(--fs-h3); letter-spacing: -0.02em;
+  margin: 0 0 clamp(32px, 4vw, 56px); padding-bottom: 14px; border-bottom: 1px solid var(--ink); color: var(--ink);
+}
+.hero-foot .intro .col-head { margin-left: calc(-1 * (var(--side) + var(--gutter))); padding-left: calc(var(--side) + var(--gutter)); }
+.hero-foot .contents .col-head { margin-right: calc(-1 * var(--gutter)); padding-right: var(--gutter); }
 .intro p strong { color: var(--ink); font-weight: 600; }
 .intro-name .intro-lead { display: block; margin-bottom: 16px; }
-.intro .intro-text { font-size: var(--fs-bl); line-height: 1.75; max-width: 32em; }
+.intro .intro-text { font-size: var(--fs-h3); line-height: 1.7; max-width: 30em; }
 
-.contents { align-self: end; }
-.contents h2 { font-family: var(--f-en); font-weight: 900; font-size: var(--fs-h3); letter-spacing: -0.02em; margin: 0 0 14px; }
-.contents ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.contents { align-self: stretch; }
+.contents ol { list-style: none; margin: auto 0 0; padding: 0; }
 .contents li a {
   display: grid; grid-template-columns: 96px 1fr auto; align-items: center;
   padding: 20px 0; border-bottom: 1px solid var(--line);
@@ -190,11 +198,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   border-top: 1px solid var(--dark-line);
 }
 .feat:nth-child(even) .feat-media { order: -1; }
+/* 번호: PORTFOLIO. 와 같은 글꼴 + 파랑 네모 점 */
 .feat-no {
-  display: inline-grid; place-items: center;
-  width: 42px; height: 46px; margin-bottom: 30px;
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  font-family: var(--f-en); font-weight: 800; font-size: var(--fs-c); color: var(--on-accent);
+  font-family: var(--f-en); font-weight: 900; font-size: clamp(40px, 4vw, 64px);
+  line-height: .8; letter-spacing: -0.055em; color: var(--on-dark);
+  margin-bottom: 30px;
+}
+.feat-no::after {
+  content: ""; display: inline-block; width: .2em; height: .2em; margin-left: .06em;
   background: var(--accent);
 }
 .feat h3 { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 20px; }
@@ -441,6 +452,7 @@ body.lock { overflow: hidden; }
 @media (max-width: 900px) {
   .hero-foot, .contact-body { grid-template-columns: 1fr; }
   .contents ol, .contact-list { margin-left: calc(-1 * var(--gutter)); }
+  .hero-foot .intro .col-head, .hero-foot .contents .col-head { margin-left: calc(-1 * var(--gutter)); margin-right: calc(-1 * var(--gutter)); padding-left: var(--gutter); padding-right: var(--gutter); }
   .contents li a, .contact-list li { padding-left: var(--gutter); }
   .contents li a:hover, .contact-list li:hover { padding-left: calc(var(--gutter) + 8px); }
   .feat { grid-template-columns: 1fr; }
