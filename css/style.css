@@ -146,7 +146,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 
 .hero-foot {
-  display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(24px, 5vw, 80px);
+  --hf-gap: clamp(24px, 5vw, 80px);
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--hf-gap);
   padding: clamp(56px, 8vw, 120px) 0;
 }
 .intro-name { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 20px; }
@@ -157,9 +158,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .intro .intro-name { margin-top: auto; }
 .hero-foot .col-head {
   font-family: var(--f-en); font-weight: 900; font-size: var(--fs-h3); letter-spacing: -0.02em;
-  margin: 0 0 clamp(32px, 4vw, 56px); padding-bottom: 14px; border-bottom: 1px solid var(--ink); color: var(--ink);
+  margin: 0 0 clamp(32px, 4vw, 56px); padding-bottom: 14px; border-bottom: 1px solid var(--line); color: var(--ink);
 }
-.hero-foot .intro .col-head { margin-left: calc(-1 * (var(--side) + var(--gutter))); padding-left: calc(var(--side) + var(--gutter)); }
+.hero-foot .intro .col-head { max-width: none; margin-left: calc(-1 * (var(--side) + var(--gutter))); padding-left: calc(var(--side) + var(--gutter)); margin-right: calc(-1 * var(--hf-gap)); }
 .hero-foot .contents .col-head { margin-right: calc(-1 * var(--gutter)); padding-right: var(--gutter); }
 .intro p strong { color: var(--ink); font-weight: 600; }
 .intro-name .intro-lead { display: block; margin-bottom: 16px; }
