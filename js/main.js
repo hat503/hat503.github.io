@@ -213,14 +213,18 @@
   // ══════════ 인터랙션 ══════════
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 푸터 큰 글자를 글자 단위로 쪼갬 (글자별 호버)
-  document.querySelectorAll('.ft-word a').forEach((el) => {
+  // 큰 영문 글자를 글자 단위로 쪼갬
+  // - 위쪽 타이틀: 처음 뜰 때 한 글자씩 올라옴
+  // - 푸터 LET'S TALK.: 글자별 호버
+  document.querySelectorAll('.hero-word, .page-word, .ft-word a').forEach((el) => {
+    let n = 0;
     [...el.childNodes].forEach((node) => {
-      if (node.nodeType !== 3) { node.classList.add('ch'); return; }
+      if (node.nodeType !== 3) { node.classList.add('ch'); node.style.setProperty('--i', n++); return; }
       const frag = document.createDocumentFragment();
       [...node.textContent].forEach((c) => {
         const s = document.createElement('span');
         s.className = 'ch';
+        s.style.setProperty('--i', n++);
         s.textContent = c === ' ' ? ' ' : c;
         frag.appendChild(s);
       });

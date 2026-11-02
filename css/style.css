@@ -418,6 +418,14 @@ body.lock { overflow: hidden; }
 .hero-word .dot, .page-word .dot { transition: color .3s; }
 .hero-word:hover .dot, .page-word:hover .dot { color: var(--ink); }
 
+/* 위쪽 큰 타이틀: 처음 뜰 때 한 글자씩 올라옴 (호버 효과는 단어 전체 색만) */
+.hero-word .ch, .page-word .ch { display: inline-block; }
+.motion .hero-word .ch, .motion .page-word .ch {
+  animation: chUp .9s cubic-bezier(.2, .8, .2, 1) both;
+  animation-delay: calc(var(--i) * 55ms + 80ms);
+}
+@keyframes chUp { from { opacity: 0; transform: translateY(45%) rotate(4deg); } }
+
 /* 푸터 LET'S TALK.: 글자에 마우스 올리면 그 글자만 살짝 튐 */
 .ft-word .ch { display: inline-block; transition: transform .35s cubic-bezier(.3, 1.6, .5, 1), color .2s; }
 .ft-word .ch:hover { transform: translateY(-10%); color: var(--accent-lt); transition-duration: .15s; }
