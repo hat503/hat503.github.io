@@ -147,8 +147,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .hero-foot {
   --hf-gap: clamp(24px, 5vw, 80px);
+  --hf-pad: clamp(56px, 8vw, 120px);
   display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--hf-gap);
-  padding: clamp(56px, 8vw, 120px) 0;
+  padding: var(--hf-pad) 0;
 }
 .intro-name { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 20px; }
 .intro-name small { display: block; font-family: var(--f-en); font-size: .42em; font-weight: 500; letter-spacing: 0; color: var(--ink-2); margin-top: 8px; }
@@ -158,7 +159,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .intro .intro-name { margin-top: auto; }
 .hero-foot .col-head {
   font-family: var(--f-en); font-weight: 900; font-size: var(--fs-h3); letter-spacing: -0.02em;
-  margin: 0 0 clamp(32px, 4vw, 56px); padding-bottom: 14px; border-bottom: 1px solid var(--line); color: var(--ink);
+  margin: 0 0 clamp(32px, 4vw, 56px); padding-top: 14px; padding-bottom: 14px;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--ink);
 }
 .hero-foot .intro .col-head { max-width: none; margin-left: calc(-1 * (var(--side) + var(--gutter))); padding-left: calc(var(--side) + var(--gutter)); margin-right: calc(-1 * var(--hf-gap)); }
 .hero-foot .contents .col-head { margin-right: calc(-1 * var(--gutter)); padding-right: var(--gutter); }
@@ -166,7 +168,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .intro-name .intro-lead { display: block; margin-bottom: 16px; }
 .intro .intro-text { font-size: var(--fs-h3); line-height: 1.7; max-width: none; }
 
-.contents { align-self: stretch; }
+.contents { align-self: stretch; position: relative; }
+/* 두 칸 사이 세로선: 제목 줄 위 선부터 역량 줄 선까지 */
+.contents::before {
+  content: ""; position: absolute; top: 0; bottom: calc(-1 * var(--hf-pad));
+  left: calc(-1 * var(--hf-gap) / 2); border-left: 1px solid var(--line);
+}
 .contents ol { list-style: none; margin: auto 0 0; padding: 0; }
 .contents li a {
   display: grid; grid-template-columns: 96px 1fr auto; align-items: center;
@@ -451,6 +458,7 @@ body.lock { overflow: hidden; }
 
 /* ── 반응형 ── */
 @media (max-width: 900px) {
+  .contents::before { display: none; }
   .hero-foot, .contact-body { grid-template-columns: 1fr; }
   .contents ol, .contact-list { margin-left: calc(-1 * var(--gutter)); }
   .hero-foot .intro .col-head, .hero-foot .contents .col-head { margin-left: calc(-1 * var(--gutter)); margin-right: calc(-1 * var(--gutter)); padding-left: var(--gutter); padding-right: var(--gutter); }
