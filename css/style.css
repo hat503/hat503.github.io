@@ -375,16 +375,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 body.lock { overflow: hidden; }
 
 /* ── 인터랙션 ── */
-/* 큰 타이틀: 글자가 차례로 올라오고, 마우스 올리면 살짝 튐 */
-.ch { display: inline-block; transition: transform .35s cubic-bezier(.3, 1.6, .5, 1), color .2s; }
-.motion .hero-word .ch, .motion .page-word .ch {
-  animation: chUp .9s cubic-bezier(.2, .8, .2, 1) both;
-  animation-delay: calc(var(--i) * 55ms + 80ms);
-}
-@keyframes chUp { from { opacity: 0; transform: translateY(45%) rotate(4deg); } }
-.hero-word .ch:hover, .page-word .ch:hover, .ft-word .ch:hover { transform: translateY(-10%); color: var(--accent); transition-duration: .15s; }
-.ft-word .ch:hover { color: var(--accent-lt); }
-
 /* 스크롤 진입 시 아래에서 올라오기 */
 .motion [data-reveal] {
   opacity: 0; transform: translateY(28px);
@@ -417,6 +407,13 @@ body.lock { overflow: hidden; }
 /* 큰 영문 타이틀: 마우스 올리면 전체가 파랑 (LET'S TALK.와 같은 효과) */
 .hero-word, .page-word { transition: color .3s; cursor: default; }
 .hero-word:hover, .page-word:hover { color: var(--accent); }
+/* 호버 시 점은 색 반전 */
+.hero-word .dot, .page-word .dot { transition: color .3s; }
+.hero-word:hover .dot, .page-word:hover .dot { color: var(--ink); }
+
+/* 푸터 LET'S TALK.: 글자에 마우스 올리면 그 글자만 살짝 튐 */
+.ft-word .ch { display: inline-block; transition: transform .35s cubic-bezier(.3, 1.6, .5, 1), color .2s; }
+.ft-word .ch:hover { transform: translateY(-10%); color: var(--accent-lt); transition-duration: .15s; }
 
 /* 헤더: 스크롤하면 그림자 */
 .hd { transition: box-shadow .3s; }

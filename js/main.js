@@ -213,16 +213,14 @@
   // ══════════ 인터랙션 ══════════
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 큰 영문 타이틀을 글자 단위로 쪼갬 (로드 시 차례로 올라오고, 글자에 마우스 올리면 튐)
-  document.querySelectorAll('.hero-word, .page-word, .ft-word a').forEach((el) => {
-    let n = 0;
+  // 푸터 큰 글자를 글자 단위로 쪼갬 (글자별 호버)
+  document.querySelectorAll('.ft-word a').forEach((el) => {
     [...el.childNodes].forEach((node) => {
-      if (node.nodeType !== 3) { node.style.setProperty('--i', n++); node.classList.add('ch'); return; }
+      if (node.nodeType !== 3) { node.classList.add('ch'); return; }
       const frag = document.createDocumentFragment();
       [...node.textContent].forEach((c) => {
         const s = document.createElement('span');
         s.className = 'ch';
-        s.style.setProperty('--i', n++);
         s.textContent = c === ' ' ? ' ' : c;
         frag.appendChild(s);
       });
