@@ -163,7 +163,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .hero-foot .contents .col-head { margin-right: calc(-1 * var(--gutter)); padding-right: var(--gutter); }
 .intro p strong { color: var(--ink); font-weight: 600; }
 .intro-name .intro-lead { display: block; margin-bottom: 16px; }
-.intro .intro-text { font-size: var(--fs-h3); line-height: 1.7; max-width: 30em; }
+.intro .intro-text { font-size: var(--fs-h3); line-height: 1.7; max-width: none; }
 
 .contents { align-self: stretch; }
 .contents ol { list-style: none; margin: auto 0 0; padding: 0; }
