@@ -108,7 +108,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .title { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; margin: 0; letter-spacing: -0.04em; }
 
 /* ── HERO ── */
-.hero { padding-top: clamp(40px, 7vw, 96px); padding-bottom: 0; }
+/* PORTFOLIO. 위 여백 = 아래(소개 구간) 여백 */
+.hero { --hf-pad: clamp(56px, 8vw, 120px); --hf-pad-b: clamp(32px, 3vw, 48px); padding-top: var(--hf-pad); padding-bottom: 0; }
 .hero-word {
   font-family: var(--f-en); font-weight: 900;
   /* 컨테이너 폭에 'PORTFOLIO.'가 꽉 차도록 */
@@ -168,6 +169,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .intro p strong { color: var(--ink); font-weight: 600; }
 .intro-name .intro-lead { display: block; margin-bottom: 16px; }
 .intro .intro-text { font-size: var(--fs-bl); line-height: 1.7; max-width: none; }
+.intro-text .ln { display: block; }
+.intro-text .m-br { display: none; }
 
 .contents { align-self: stretch; position: relative; margin-bottom: calc(-1 * var(--hf-pad-b)); }
 /* 두 칸 사이 세로선: 제목 줄 위 선부터 역량 줄 선까지 */
@@ -440,10 +443,12 @@ body.lock { overflow: hidden; }
 
 /* 큰 영문 타이틀: 마우스 올리면 전체가 파랑 (LET'S TALK.와 같은 효과) */
 .hero-word, .page-word { transition: color .3s; cursor: default; }
-.hero-word:hover, .page-word:hover { color: var(--accent); }
+@media (hover: hover) {
+  .hero-word:hover, .page-word:hover { color: var(--accent); }
 /* 호버 시 점은 색 반전 */
 .hero-word .dot, .page-word .dot { transition: color .3s; }
-.hero-word:hover .dot, .page-word:hover .dot { color: var(--ink); }
+  .hero-word:hover .dot, .page-word:hover .dot { color: var(--ink); }
+}
 
 /* 위쪽 큰 타이틀: 처음 뜰 때 한 글자씩 올라옴 (호버 효과는 단어 전체 색만) */
 .hero-word .ch, .page-word .ch { display: inline-block; }
@@ -465,6 +470,14 @@ body.lock { overflow: hidden; }
 
 /* ── 반응형 ── */
 @media (max-width: 900px) {
+  /* 모바일: 소개 문장 줄바꿈, 소개 → 역량 순서, 목차는 숨김 */
+  .intro-text .m-br { display: inline; }
+  .intro-text .ln-gap { margin-top: 1em; }
+  .hero { display: flex; flex-direction: column; }
+  .hero-foot { display: contents; }
+  .hero .intro { order: 1; margin-top: var(--hf-pad); }
+  .hero .skills { order: 2; margin-top: var(--hf-pad-b); }
+  .hero .contents { display: none; }
   .contents::before { display: none; }
   .hero-foot, .contact-body { grid-template-columns: 1fr; }
   .contents ol, .contact-list { margin-left: calc(-1 * var(--gutter)); }
