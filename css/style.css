@@ -167,7 +167,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .hero-foot .contents .col-head { margin-right: calc(-1 * var(--gutter)); padding-right: var(--gutter); margin-bottom: 0; }
 .intro p strong { color: var(--ink); font-weight: 600; }
 .intro-name .intro-lead { display: block; margin-bottom: 16px; }
-.intro .intro-text { font-size: var(--fs-h3); line-height: 1.7; max-width: none; }
+.intro .intro-text { font-size: var(--fs-bl); line-height: 1.7; max-width: none; }
 
 .contents { align-self: stretch; position: relative; margin-bottom: calc(-1 * var(--hf-pad-b)); }
 /* 두 칸 사이 세로선: 제목 줄 위 선부터 역량 줄 선까지 */
