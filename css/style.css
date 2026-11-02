@@ -79,13 +79,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
 }
-.logo { font-family: var(--f-en); font-weight: 900; font-size: 18px; letter-spacing: -0.02em; }
+.logo { font-family: var(--f-en); font-weight: 900; font-size: 22px; letter-spacing: -0.02em; }
 .logo i { font-style: normal; color: var(--accent-ink); }
-.nav { display: flex; gap: clamp(16px, 3vw, 40px); font-family: var(--f-en); font-size: 14px; font-weight: 500; }
+.nav { display: flex; gap: clamp(20px, 3.4vw, 48px); font-family: var(--f-en); font-size: 18px; font-weight: 500; }
 .nav a { position: relative; padding: 4px 0; color: var(--ink-2); transition: color .2s; }
 .nav a:hover, .nav a[aria-current] { color: var(--ink); }
 .nav a[aria-current]::before {
-  content: ''; position: absolute; left: -11px; top: 50%; width: 6px; height: 6px; margin-top: -3px;
+  content: ''; position: absolute; left: -14px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px;
   border-radius: 50%; background: var(--accent);
 }
 
@@ -339,7 +339,7 @@ body.lock { overflow: hidden; }
   .works-head p { display: none; }
 }
 @media (max-width: 520px) {
-  .nav { gap: 18px; font-size: 13px; }
+  .nav { gap: 20px; font-size: 15px; }
   .contact-list li { grid-template-columns: 1fr auto; }
   .contact-list .k { grid-column: 1 / -1; }
   .page-sub { flex-direction: column; gap: 4px; }
