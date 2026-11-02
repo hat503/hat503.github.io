@@ -1,0 +1,2237 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rxpert 스킨솔루션</title>
+<style>
+  /* 아임웹 기본 틀 흉내 (실제 페이지에서는 아임웹 CSS가 대신함) */
+  body { margin: 0; background: #fff; }
+  .section_wrap { padding: 5px 0; }
+  .inside { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+  .col-dz { padding: 0 15px; }
+  #doz_footer_wrap { background: #222; color: #aaa; font: 12px sans-serif; text-align: center; padding: 12px; }
+  .checkbox-styled label { position: relative; padding-left: 26px; cursor: pointer; }
+  .checkbox-styled input { position: absolute; opacity: 0; }
+  .checkbox-styled span::before { content: ""; position: absolute; left: 0; top: 2px; width: 16px; height: 16px; border: 1px solid; }
+  .checkbox-styled input:checked + span::before { background: #fff !important; }
+</style>
+<style>@font-face{font-family:"Pretendard Variable";src:url("../../assets/fonts/PretendardVariable.woff2") format("woff2-variations");font-weight:45 920;font-display:swap}</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6..96,400&family=Noto+Serif+Display:ital,wght@1,600&family=Playfair+Display:ital@1&display=swap">
+<style>
+/* ============================================================
+   Rxpert 랜딩 — 스타일
+   - 시안(가로 1200px) 크기를 그대로 쓰고, 화면 폭에 맞춰 같은 비율로 줄어든다 (--u = 시안 1px)
+   - 너무 작아지는 글자는 max()로 최소 크기를 지킨다
+   - 아임웹 구조: body > .section_wrap(섹션) … > #doz_footer_wrap
+   ============================================================ */
+
+/* 글꼴은 rx.js와 블록 맨 위 <link>로 불러옴 (아임웹 코드 위젯이 @import를 무시할 수 있어서) */
+
+:root {
+  --rx-navy: #263961;
+  --rx-ink: #18233f;
+  --rx-blue: #3a65cd;
+  --rx-blue-deep: #265ad2;
+  --rx-hero: #bbc2cc;
+  --rx-intro: #c2c7dd;
+  --rx-card: #f6f6f6;
+  --rx-mist: #f4f3f8;
+  --rx-fog: #e9e9e9;
+  --rx-slate: #526180;
+  --rx-panel: 780px; /* PC 본문 폭 (1600px 화면 기준, 작은 화면에선 같은 비율로 줄어듦) */
+  --sv: calc(min(100vw, 1600px) / 1600); /* PC 왼쪽 문구 크기 단위: 1600px 화면에서 1px */
+  --rx-gap: clamp(80px, calc(20vw - 160px), 240px); /* PC에서 본문 오른쪽 여백 */
+  --rx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- 페이지 틀: 모바일은 그대로, PC는 780px 본문 + 양옆 배경 ---------- */
+
+html.rx-page body {
+  background: #101827 !important;
+}
+html.rx-page body > .section_wrap,
+html.rx-page body > #doz_footer_wrap {
+  position: relative;
+  z-index: 1;
+}
+/* 랜딩 코드/폼이 들어간 섹션은 아임웹 기본 여백을 없앤다 */
+html.rx-page .section_wrap:has(.rx),
+html.rx-page .section_wrap:has(._form-widget) {
+  padding: 0 !important;
+}
+html.rx-page .section_wrap:has(.rx) .inside,
+html.rx-page .section_wrap:has(.rx) .col-dz,
+html.rx-page .section_wrap:has(._form-widget) .inside,
+html.rx-page .section_wrap:has(._form-widget) .col-dz {
+  max-width: none !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+/* 아임웹 행의 음수 여백(-7.5px) 때문에 화면 밖으로 넘치는 것 막기 */
+html.rx-page .section_wrap:has(.rx) .doz_row,
+html.rx-page .section_wrap:has(._form-widget) .doz_row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+html.rx-page .section_wrap:has(._form-widget) {
+  background: var(--rx-navy) !important;
+}
+
+.rx-stage {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --rx-panel: clamp(560px, 48.75vw, 780px); /* 1600px 이하에서는 화면 폭에 맞춰 같이 줄어듦 */
+  }
+  html.rx-page body > .section_wrap {
+    width: var(--rx-panel) !important;
+    max-width: var(--rx-panel) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.35);
+    clip-path: inset(0 -100px); /* 그림자는 양옆에만 (섹션끼리 위아래로 겹치는 그림자 없음) */
+  }
+  /* 푸터는 본문 틀 밖으로: 화면 전체 폭, 랜딩 맨 아래에 닿으면 이어서 올라옴 */
+  html.rx-page body > #doz_footer_wrap {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    box-sizing: border-box !important; /* 안쪽 여백 때문에 화면 밖으로 넘치지 않게 */
+  }
+
+  .rx-stage {
+    display: block;
+    background: var(--rx-navy);
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    color: #fff;
+  }
+  .rx-stage__bg {
+    position: absolute;
+    inset: 0;
+    background: center / cover no-repeat; /* 연구실 일러스트 위에 파랑 오버레이 */
+    filter: brightness(0) invert(1); /* 선 색이 무엇이든 흰색으로 (투명 부분은 그대로) */
+  }
+  .rx-stage__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(24, 35, 63, 0.92) 0%, rgba(38, 57, 97, 0.78) 45%, rgba(24, 35, 63, 0.9) 100%);
+  }
+  .rx-stage__copy {
+    display: none;
+  }
+}
+
+/* 넓은 화면: BLBL처럼 본문을 오른쪽에 두고 왼쪽에 안내 문구 */
+@media (min-width: 1400px) {
+  html.rx-page body > .section_wrap {
+    margin-right: var(--rx-gap) !important;
+  }
+  .rx-stage__copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    /* 왼쪽 빈 공간의 가운데에 놓기 */
+    left: calc((100vw - var(--rx-panel) - var(--rx-gap)) / 2);
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100vw - var(--rx-panel) - var(--rx-gap) - 64px);
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    word-break: keep-all;
+  }
+  .rx-stage__copy > * {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: rx-rise 1s var(--rx-ease) forwards;
+  }
+  .rx-stage__copy > :nth-child(2) { animation-delay: 0.1s; }
+  .rx-stage__copy > :nth-child(3) { animation-delay: 0.2s; }
+  .rx-stage__copy > :nth-child(4) { animation-delay: 0.3s; }
+  .rx-stage__copy > :nth-child(5) { animation-delay: 0.4s; }
+  .rx-stage__copy > :nth-child(6) { animation-delay: 0.5s; }
+}
+.rx-stage__logo {
+  width: calc(190 * var(--sv));
+  margin-bottom: calc(48 * var(--sv));
+  filter: brightness(0) invert(1);
+}
+.rx-stage__eyebrow {
+  margin: 0 0 calc(10 * var(--sv));
+  font-size: calc(24 * var(--sv));
+  font-weight: 500;
+  opacity: 0.8;
+}
+.rx-stage__title {
+  margin: 0;
+  font-size: calc(52 * var(--sv));
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.rx-stage__num {
+  margin: calc(36 * var(--sv)) 0 0; /* 이벤트명 ↔ 숫자 */
+  font-family: "Bodoni Moda", serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 11; /* 가는 획이 사라지지 않게 */
+  font-size: calc(160 * var(--sv));
+  line-height: 1;
+}
+.rx-stage__num em {
+  display: block;
+  font-family: "Playfair Display", serif;
+  font-size: calc(34 * var(--sv));
+  margin-bottom: calc(-8 * var(--sv));
+}
+.rx-stage__num small {
+  font-size: 0.4em;
+}
+.rx-stage__date {
+  margin: 0; /* 숫자 바로 아래에 붙임 */
+  font-size: calc(20 * var(--sv));
+  opacity: 0.75;
+}
+.rx-stage__btns {
+  display: flex;
+  gap: calc(12 * var(--sv));
+  margin-top: calc(52 * var(--sv));
+}
+.rx-stage__btn {
+  display: inline-flex;
+  align-items: center;
+  height: calc(60 * var(--sv));
+  padding: 0 calc(32 * var(--sv));
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  color: #fff !important;
+  font-size: calc(18 * var(--sv));
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background 0.3s, color 0.3s, transform 0.3s var(--rx-ease);
+}
+.rx-stage__btn:hover {
+  transform: translateY(calc(-2 * var(--sv)));
+  background: rgba(255, 255, 255, 0.12);
+}
+.rx-stage__btn--main {
+  background: #fff;
+  border-color: #fff;
+  color: var(--rx-navy) !important;
+}
+.rx-stage__btn--main:hover {
+  background: var(--rx-intro);
+}
+
+@keyframes rx-rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- 공통 ---------- */
+
+.rx {
+  --u: calc(100cqw / 1200); /* 시안 1px */
+  container-type: inline-size;
+  width: 100%;
+  overflow: hidden;
+  color: var(--rx-ink);
+  font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+  text-align: center;
+}
+.rx *,
+.rx *::before,
+.rx *::after {
+  box-sizing: border-box;
+}
+.rx img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.rx h2,
+.rx h3,
+.rx p,
+.rx ul {
+  margin: 0;
+  padding: 0;
+}
+.rx b,
+.rx strong {
+  font-weight: 700;
+}
+.rx-sec {
+  position: relative;
+}
+.rx-blue {
+  color: var(--rx-blue);
+}
+.rx-logo {
+  width: calc(240 * var(--u));
+  min-width: 96px;
+  margin: 0 auto;
+}
+.rx-logo--white {
+  filter: brightness(0) invert(1);
+}
+.rx-l {
+  display: block;
+}
+.rx-script {
+  display: inline-block;
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: max(17px, calc(40 * var(--u)));
+  color: var(--rx-blue);
+  letter-spacing: 0;
+}
+.rx-sec__head {
+  padding: calc(160 * var(--u)) calc(60 * var(--u)) calc(110 * var(--u));
+}
+.rx-sec__head h2 {
+  margin-top: max(12px, calc(36 * var(--u))); /* 영어 문구 ↔ 섹션 제목 */
+  font-size: max(24px, calc(76 * var(--u)));
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--rx-ink);
+}
+.rx-sec__lead {
+  font-size: max(18px, calc(48 * var(--u)));
+  font-weight: 400;
+}
+p.rx-sec__lead {
+  margin-top: calc(16 * var(--u));
+}
+
+/* 형광펜 박스 */
+.rx-hl {
+  position: relative;
+  display: inline-block;
+  padding: 0 calc(14 * var(--u));
+  background: none;
+  color: inherit;
+  z-index: 0;
+}
+.rx-hl::before {
+  content: "";
+  position: absolute;
+  inset: 0.04em 0;
+  background: var(--hl-bg, var(--rx-navy));
+  z-index: -1;
+  transform-origin: left center;
+}
+.rx-hl {
+  color: var(--hl-fg, #fff);
+}
+
+/* ---------- 아이폰 통화 확인창 (rx.js가 만듦) ---------- */
+
+.rx-call {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  background: rgba(12, 20, 45, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s, visibility 0s 0.25s;
+}
+.rx-call.is-on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s;
+}
+.rx-call__box {
+  width: 100%;
+  max-width: 360px;
+  padding: 22px 18px 14px;
+  border-radius: 18px;
+  background: #fff;
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.3s var(--rx-ease);
+}
+.rx-call.is-on .rx-call__box {
+  transform: none;
+}
+.rx-call__label {
+  margin: 0;
+  color: #8a8f99;
+  font-size: 14px;
+}
+.rx-call__num {
+  margin: 6px 0 18px;
+  color: var(--rx-ink);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.rx-call__go,
+.rx-call__cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+.rx-call__go {
+  background: var(--rx-navy);
+  color: #fff !important;
+}
+.rx-call__cancel {
+  margin-top: 6px;
+  background: none;
+  color: #8a8f99;
+}
+
+/* ---------- 모바일 하단 플로팅 상담 버튼 ---------- */
+
+.rx-float {
+  position: fixed;
+  left: 50%;
+  bottom: max(10px, env(safe-area-inset-bottom, 0px)); /* 아이폰 홈바 높이만큼만 띄움 (더하지 않음) */
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 24px; /* 길이는 글자에 맞춤 */
+  white-space: nowrap;
+  border-radius: 999px;
+  background: var(--rx-navy);
+  box-shadow: 0 0 18px 2px rgba(110, 150, 255, 0.55); /* 그림자 대신 파란 글로우 */
+  color: #fff !important;
+  font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-decoration: none !important;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 120%);
+  transition: opacity 0.3s, transform 0.4s var(--rx-ease);
+}
+.rx-float.is-on {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+/* 상담 가능 초록 점 깜빡 + 화살표 톡톡 */
+.rx-float__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #7dffb0;
+}
+.rx-float.is-on .rx-float__dot {
+  animation: rx-blink 1.6s infinite;
+}
+.rx-float.is-on i {
+  animation: rx-nudge 1.2s ease-in-out infinite;
+}
+.rx-float.is-on {
+  animation: rx-glow 2.4s ease-in-out infinite; /* 글로우가 천천히 숨쉬듯 */
+}
+@keyframes rx-glow {
+  50% {
+    box-shadow: 0 0 28px 6px rgba(110, 150, 255, 0.75);
+  }
+}
+@keyframes rx-blink {
+  0% {
+    box-shadow: 0 0 0 0 rgba(125, 255, 176, 0.7);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 8px rgba(125, 255, 176, 0);
+  }
+}
+@keyframes rx-nudge {
+  0%,
+  100% {
+    transform: translateX(0) rotate(-45deg);
+  }
+  50% {
+    transform: translateX(5px) rotate(-45deg);
+  }
+}
+.rx-float i {
+  width: 7px;
+  height: 7px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(-45deg);
+}
+@media (min-width: 1400px) {
+  .rx-float {
+    display: none; /* 넓은 PC는 왼쪽 문구에 상담 버튼이 있음 */
+  }
+}
+
+/* ---------- 1. 이벤트 ---------- */
+
+.rx-event {
+  background: var(--rx-hero);
+  padding: calc(180 * var(--u)) 0 calc(165 * var(--u));
+}
+.rx .rx-event__head {
+  margin-top: max(22px, calc(80 * var(--u))); /* 로고 ↔ 문구 */
+  font-size: max(21px, calc(52 * var(--u)));
+  font-weight: 500;
+  line-height: 1.55;
+}
+.rx-event__head .rx-hl {
+  font-weight: 600;
+}
+.rx-event__name {
+  font-size: max(34px, calc(86 * var(--u)));
+  font-weight: 700;
+}
+.rx .rx-event__num {
+  position: relative;
+  display: inline-block;
+  margin-top: max(30px, calc(80 * var(--u))); /* 이벤트명 ↔ 숫자 */
+  font-family: "Bodoni Moda", serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 11; /* 가는 획이 사라지지 않게 */
+  font-weight: 400;
+  font-size: calc(290 * var(--u));
+  line-height: 1;
+  color: #25365e;
+  letter-spacing: -0.03em;
+}
+.rx-event__num .rx-script {
+  position: absolute;
+  left: calc(-20 * var(--u));
+  top: calc(-24 * var(--u));
+  font-size: max(16px, calc(48 * var(--u)));
+  color: #25365e;
+}
+/* 숫자만 Noto Serif Display (%와 up to~는 그대로) */
+.rx-event__num > [data-count],
+.rx-stage__num > .rx-stage__val {
+  font-family: "Noto Serif Display", serif;
+  font-style: italic;
+  font-weight: 600;
+  font-variation-settings: normal;
+}
+.rx-event__num small {
+  font-size: 0.32em;
+  margin-left: 0.04em;
+}
+.rx .rx-event__date {
+  margin-top: calc(-6 * var(--u)); /* 숫자 바로 아래에 붙임 */
+  font-size: max(14px, calc(26 * var(--u)));
+  font-weight: 500;
+}
+.rx-event__visual {
+  margin-top: calc(70 * var(--u));
+  /* 사진 아래가 배경색으로 서서히 흐려지게 */
+  -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+}
+.rx-gifts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); /* 글이 길어도 두 칸 폭은 같게 */
+  grid-template-rows: auto 1fr; /* 두 카드의 글 영역·사진 영역 높이를 서로 맞춤 */
+  gap: calc(22 * var(--u));
+  margin: calc(5 * var(--u)) calc(131 * var(--u)) 0;
+}
+.rx-gift {
+  min-width: 0;
+  overflow: hidden;
+  display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
+  background: var(--rx-navy);
+  border: calc(3 * var(--u)) solid var(--rx-navy);
+  color: #fff;
+}
+.rx-gift__head {
+  min-width: 0; /* 좁은 폰에서 글이 카드 밖으로 밀어내지 않게 */
+  word-break: keep-all;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(34 * var(--u)) calc(10 * var(--u)) calc(30 * var(--u));
+}
+.rx-gift__no {
+  display: grid;
+  place-items: center;
+  width: calc(40 * var(--u));
+  height: calc(40 * var(--u));
+  min-width: 18px;
+  min-height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--rx-navy);
+  font-style: normal;
+  font-weight: 700;
+  font-size: max(13px, calc(24 * var(--u)));
+  line-height: 1;
+}
+.rx-gift__head strong {
+  margin-top: calc(18 * var(--u));
+  font-size: max(16px, calc(40 * var(--u)));
+  line-height: 1.3;
+}
+.rx-gift__head span {
+  margin-top: calc(6 * var(--u));
+  font-size: max(13px, calc(26 * var(--u)));
+  opacity: 0.9;
+}
+.rx-gift img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 카드 아래 남색 빈틈 없이 채움 */
+}
+
+/* ---------- 2. 인트로 + 아이콘 ---------- */
+
+.rx-intro {
+  background: linear-gradient(180deg, var(--rx-intro) 0%, #b4bcd6 100%);
+  padding-top: calc(150 * var(--u));
+}
+.rx .rx-intro__title {
+  margin-top: max(22px, calc(80 * var(--u))); /* 로고 ↔ 제목 */
+  font-size: max(26px, calc(84 * var(--u)));
+  line-height: 1.3;
+}
+.rx-intro__sub {
+  margin-top: calc(8 * var(--u));
+  font-size: max(19px, calc(56 * var(--u)));
+  font-weight: 400;
+}
+.rx .rx-intro__desc {
+  margin-top: max(22px, calc(70 * var(--u))); /* 소제목 ↔ 설명 */
+  font-size: max(16px, calc(37 * var(--u))); /* POINT 설명과 같은 크기 */
+  line-height: 2;
+  font-weight: 500;
+}
+.rx-intro__visual {
+  margin-top: calc(20 * var(--u));
+  /* 사진 위·아래 모두 배경색으로 흐려지게 (아이콘 띠는 그대로 진한 남색) */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 72%, transparent 100%);
+}
+.rx-intro__visual img {
+  width: 100%;
+}
+.rx .rx-icons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  list-style: none;
+  background: var(--rx-navy);
+  color: #fff;
+  padding: calc(50 * var(--u)) calc(30 * var(--u)) calc(48 * var(--u)); /* 아이콘 위·글씨 아래 여백 */
+}
+.rx-icons li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(14 * var(--u)) calc(8 * var(--u));
+}
+.rx-icons li + li {
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+}
+.rx-icons img {
+  height: calc(150 * var(--u));
+  min-height: 46px;
+  width: auto;
+}
+.rx-icons strong {
+  margin-top: calc(40 * var(--u));
+  font-size: max(16px, calc(38 * var(--u)));
+}
+.rx-icons span {
+  margin-top: calc(10 * var(--u));
+  font-size: max(13px, calc(26 * var(--u)));
+  line-height: 1.55;
+  opacity: 0.9;
+}
+
+/* ---------- 3. 가격 ---------- */
+
+.rx-promo {
+  background: #fff;
+}
+.rx-promo .rx-sec__head {
+  padding-bottom: calc(100 * var(--u));
+}
+.rx-promo .rx-sec__lead {
+  color: var(--rx-ink);
+}
+.rx-promo h2 b:not(.rx-blue) {
+  color: var(--rx-navy);
+}
+.rx-plan {
+  display: grid;
+  grid-template-columns: 532fr 668fr;
+  text-align: left;
+}
+.rx-plan--rev {
+  grid-template-columns: 662fr 538fr;
+}
+.rx-plan--rev .rx-plan__img {
+  order: -1;
+}
+.rx-plan__txt {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--rx-card);
+  padding: max(42px, calc(120 * var(--u))) calc(30 * var(--u)) max(42px, calc(120 * var(--u))) calc(72 * var(--u)); /* 카드 위아래 여백 (모든 카드 동일) */
+}
+.rx-plan--rev .rx-plan__txt {
+  padding-left: calc(86 * var(--u));
+}
+.rx-plan__no {
+  font-size: max(24px, calc(60 * var(--u)));
+  font-weight: 800;
+  color: var(--rx-navy);
+  line-height: 1;
+}
+.rx-plan h3 {
+  margin-top: calc(26 * var(--u));
+  font-size: max(18px, calc(42 * var(--u)));
+  font-weight: 600;
+}
+.rx .rx-plan__label {
+  margin-top: max(4px, calc(12 * var(--u)));
+  font-size: max(14px, calc(28 * var(--u)));
+  font-weight: 700;
+}
+.rx-plan ul {
+  list-style: none;
+  margin-top: max(14px, calc(40 * var(--u))); /* 제목 ↔ 구성 */
+}
+.rx-plan li {
+  word-break: keep-all; /* 단어 중간에서 줄이 바뀌지 않게 */
+  font-size: max(13px, calc(27 * var(--u)));
+  color: #4a4f5c;
+  line-height: 1.7;
+  padding-left: calc(12 * var(--u));
+}
+.rx-plan li::before {
+  content: "· ";
+}
+/* 이름+횟수 윗줄, 괄호 설명은 작게 아랫줄 (가격 04) */
+.rx-plan__list--sub li + li {
+  margin-top: 4px;
+}
+.rx-plan__list--sub small {
+  display: block;
+  padding-left: 0.7em; /* 앞 점(·) 뒤 글자에 맞춤 */
+  color: #8a8f99;
+  font-size: 0.85em;
+  line-height: 1.45;
+}
+.rx .rx-plan__was {
+  margin-top: max(16px, calc(56 * var(--u))); /* 구성 ↔ 가격 */
+  font-size: max(13px, calc(27 * var(--u)));
+  color: #8a8f99;
+}
+.rx-plan__was s {
+  position: relative;
+  text-decoration: none;
+}
+.rx-plan__was s::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 52%;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left center;
+}
+.rx .rx-plan__now {
+  margin-top: calc(6 * var(--u));
+  font-size: max(17px, calc(40 * var(--u)));
+  font-weight: 700;
+  color: var(--rx-blue);
+  white-space: nowrap;
+}
+.rx-plan__now b {
+  margin-left: 0.3em;
+  font-variant-numeric: tabular-nums;
+}
+.rx-plan__img {
+  position: relative; /* 카드 높이는 글자가 정하고 사진은 그 높이를 채움 */
+  overflow: hidden;
+}
+.rx-plan__img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- 4. 특징 ---------- */
+
+.rx-why {
+  background: #fff;
+}
+.rx-why .rx-sec__head {
+  padding-bottom: calc(90 * var(--u));
+}
+.rx-why .rx-sec__head h2 {
+  font-size: max(26px, calc(80 * var(--u)));
+}
+.rx-why .rx-sec__head b:not(.rx-blue) {
+  color: var(--rx-ink);
+}
+.rx-point {
+  position: relative;
+}
+.rx-point__img {
+  overflow: hidden;
+}
+.rx-point__img img {
+  width: 100%;
+}
+.rx-point__txt {
+  position: relative;
+  padding: 0 calc(40 * var(--u));
+}
+.rx-point h3 {
+  margin-top: max(12px, calc(36 * var(--u))); /* POINT ↔ 제목 = 영어 장식 문구 ↔ 섹션 제목 */
+  font-size: max(24px, calc(76 * var(--u)));
+  font-weight: 800;
+  line-height: 1.3;
+}
+.rx-point p {
+  margin-top: max(18px, calc(50 * var(--u))); /* 제목 ↔ 설명 */
+  font-size: max(16px, calc(37 * var(--u)));
+  line-height: 1.75;
+}
+.rx-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: max(24px, calc(56 * var(--u)));
+  padding: 0 calc(38 * var(--u));
+  line-height: 1;
+  border-radius: 999px;
+  font-size: max(13px, calc(28 * var(--u)));
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* POINT 01: 어두운 사진 위에 흰 글자 */
+.rx-point--1 {
+  background: #15140f;
+  color: #fff;
+  padding-bottom: calc(110 * var(--u));
+}
+.rx-point--1 .rx-point__img {
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+}
+.rx-point--1 .rx-point__txt {
+  margin-top: calc(-170 * var(--u));
+}
+.rx-point--1 .rx-pill {
+  background: #fff;
+  color: var(--rx-navy);
+}
+.rx-point--1 .rx-hl {
+  --hl-bg: #fff;
+  --hl-fg: var(--rx-navy);
+}
+
+/* POINT 02: 밝은 배경 + 제품 사진 */
+.rx-point--2 {
+  background: var(--rx-mist);
+  padding-top: calc(170 * var(--u));
+}
+.rx-point--2 .rx-pill {
+  background: var(--rx-navy);
+  color: #fff;
+}
+.rx-point--2 h3 {
+  color: var(--rx-navy);
+}
+.rx-point--2 p {
+  color: #3a3f4c;
+}
+.rx-point--2 .rx-point__img {
+  margin-top: calc(40 * var(--u));
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
+}
+
+/* POINT 03: 검은 배경 + 파란 박스 */
+.rx-point--3 {
+  background: #000;
+  color: #fff;
+  padding-top: calc(200 * var(--u));
+}
+.rx-point--3 .rx-pill {
+  background: #fff;
+  color: var(--rx-blue-deep);
+}
+.rx-point--3 .rx-hl {
+  --hl-bg: var(--rx-blue-deep);
+}
+.rx-point--3 .rx-point__img {
+  margin-top: calc(50 * var(--u));
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 18%);
+}
+
+/* POINT 04: 사진 + 회색 배경 */
+.rx-point--4 {
+  background: var(--rx-fog);
+  padding-bottom: calc(150 * var(--u));
+}
+.rx-point--4 .rx-point__img {
+  -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
+}
+.rx-point--4 .rx-point__txt {
+  margin-top: calc(30 * var(--u));
+}
+.rx-point--4 .rx-pill {
+  background: #111;
+  color: #fff;
+}
+.rx-point--4 .rx-hl {
+  --hl-bg: #111;
+}
+.rx-point--4 h3 {
+  color: #111;
+}
+.rx-point--4 p {
+  color: #333;
+}
+
+/* ---------- 5. 공간 ---------- */
+
+.rx-space {
+  background: #fff;
+}
+.rx-space .rx-sec__head {
+  position: relative;
+  z-index: 1; /* 위로 올라온 사진보다 글이 위에 */
+  padding-top: calc(260 * var(--u));
+  padding-bottom: 0;
+}
+.rx-space .rx-sec__head b:not(.rx-blue) {
+  color: var(--rx-ink);
+}
+.rx .rx-space__desc {
+  margin-top: max(20px, calc(64 * var(--u))); /* 제목 ↔ 설명 */
+  font-size: max(15px, calc(32 * var(--u)));
+  line-height: 1.75;
+}
+.rx-space__img {
+  margin-top: calc(-320 * var(--u)); /* 사진을 위로 끌어올려 그라데이션이 글 쪽까지 길게 오게 */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.35) 22%, #000 46%);
+  mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.35) 22%, #000 46%);
+}
+.rx-space__img img {
+  width: 100%;
+}
+
+/* 공간 사진 슬라이드 */
+.rx-slider {
+  position: relative;
+  touch-action: pan-y;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.rx-slider.is-drag {
+  cursor: grabbing;
+}
+.rx-slider img {
+  -webkit-user-drag: none; /* 사진을 끌면 사진 파일이 끌려가는 것 막기 */
+  pointer-events: none;
+}
+.rx-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s var(--rx-ease);
+}
+.rx-slide:first-child {
+  position: relative; /* 첫 장이 높이를 잡는다 */
+}
+.rx-slide.is-on {
+  opacity: 1;
+}
+.rx-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.rx-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(40 * var(--u));
+  display: flex;
+  justify-content: center;
+  gap: calc(14 * var(--u));
+  z-index: 1;
+}
+.rx-dots button {
+  width: max(7px, calc(16 * var(--u)));
+  height: max(7px, calc(16 * var(--u)));
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+.rx-dots button.is-on {
+  background: var(--rx-blue);
+  transform: scale(1.15);
+}
+.rx-space__media {
+  position: relative;
+}
+
+/* ---------- 6. 폼 제목 + 매장 정보 ---------- */
+
+.rx-formhead {
+  background: var(--rx-navy);
+  color: #fff;
+  padding: calc(150 * var(--u)) 0 calc(70 * var(--u));
+}
+.rx-formhead h2 {
+  margin-top: calc(26 * var(--u));
+  font-size: max(24px, calc(70 * var(--u)));
+  font-weight: 700;
+}
+
+.rx-info {
+  background: var(--rx-slate);
+  color: #fff;
+  padding: calc(56 * var(--u)) calc(60 * var(--u)) calc(50 * var(--u));
+}
+.rx-info strong {
+  display: block;
+  font-size: max(15px, calc(30 * var(--u)));
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.rx-info p {
+  margin-top: calc(10 * var(--u));
+  font-size: max(14px, calc(28 * var(--u)));
+  line-height: 1.6;
+}
+.rx-info a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+.rx-info__cols {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center; /* 두 칸을 합친 글 덩어리가 LOCATION과 같은 가운데에 오게 */
+  column-gap: max(20px, calc(140 * var(--u) - 24px)); /* 폰에서는 좁게 */
+  max-width: max(100%, calc(820 * var(--u)));
+  min-width: 0;
+  margin: calc(40 * var(--u)) auto 0;
+  padding-top: calc(40 * var(--u));
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  text-align: left;
+}
+.rx-info__cols p {
+  white-space: nowrap; /* 영업시간·전화번호가 중간에서 끊기지 않게 */
+}
+.rx-info__note {
+  margin-top: calc(36 * var(--u)) !important;
+  font-size: max(13px, calc(24 * var(--u))) !important;
+  opacity: 0.85;
+}
+
+/* ---------- 아임웹 입력폼 위젯 디자인 (이 페이지의 모든 입력폼) ---------- */
+
+html.rx-page ._form-widget,
+html.rx-page ._form-widget *,
+html.rx-page ._form-widget *::before,
+html.rx-page ._form-widget *::after {
+  box-sizing: border-box !important; /* 칸 너비 100% + 안쪽 여백이 화면 밖으로 넘치지 않게 */
+}
+html.rx-page ._form-widget {
+  --f-u: min(1px, calc(100vw / 600)); /* PC 본문 폭일 때 시안 크기, 모바일에서 같이 줄어듦 */
+  width: 100% !important;
+  max-width: var(--rx-panel);
+  margin: 0 auto;
+  padding: 0 calc(90 * var(--f-u)) calc(110 * var(--f-u));
+  background: var(--rx-navy);
+  font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+html.rx-page ._form-widget .form-group {
+  position: relative;
+  margin: 0 0 15px !important;
+}
+/* 항목 이름을 흰 칸 안쪽 왼쪽에 둔다 */
+html.rx-page ._form-widget .form-group > .control-label {
+  position: absolute;
+  left: 18px;
+  top: 0;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 10; /* 아임웹 선택상자(z-index 9)보다 위 */
+  color: #4a4f5c !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  pointer-events: none;
+}
+html.rx-page ._form-widget .form-control {
+  width: 100% !important;
+  height: 54px !important;
+  padding: 0 18px 0 96px !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  color: var(--rx-ink) !important;
+  font-size: 16px !important;
+  font-family: inherit !important;
+  transition: box-shadow 0.25s;
+}
+html.rx-page ._form-widget .form-control:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(122, 146, 215, 0.6) !important;
+}
+html.rx-page ._form-widget textarea.form-control {
+  height: 150px !important;
+  padding: 50px 18px 14px !important;
+  resize: vertical;
+}
+html.rx-page ._form-widget .form-select-wrap::before,
+html.rx-page ._form-widget .form-select-wrap::after {
+  display: none !important;
+}
+html.rx-page ._form-widget select.form-control {
+  -webkit-appearance: none;
+  appearance: none;
+  color: #b3b6bd !important;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='13'%3E%3Cpath d='M0 0h16L8 13z' fill='%23555'/%3E%3C/svg%3E") no-repeat right 18px center !important;
+  cursor: pointer;
+}
+html.rx-page ._form-widget select.form-control.rx-picked {
+  color: var(--rx-ink) !important;
+}
+/* 디자인된 목록 (rx.js가 만듦). 실제 select는 키보드용으로만 남기고 클릭은 목록이 받음 */
+html.rx-page ._form-widget .rx-select {
+  z-index: 1;
+}
+html.rx-page ._form-widget .rx-select-open {
+  z-index: 30;
+}
+html.rx-page ._form-widget .rx-select .form-select-wrap {
+  position: relative;
+  cursor: pointer;
+}
+html.rx-page ._form-widget .rx-select select.form-control {
+  pointer-events: none;
+  background-image: none !important;
+}
+html.rx-page ._form-widget .rx-select .form-select-wrap::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  margin-top: -7px;
+  border: solid var(--rx-navy);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  transition: transform 0.25s var(--rx-ease), margin-top 0.25s var(--rx-ease);
+  pointer-events: none;
+  z-index: 10;
+}
+html.rx-page ._form-widget .rx-select-open .form-select-wrap::after {
+  margin-top: -2px;
+  transform: rotate(-135deg);
+}
+html.rx-page ._form-widget .rx-select-open select.form-control {
+  box-shadow: 0 0 0 3px rgba(122, 146, 215, 0.6) !important;
+}
+html.rx-page ._form-widget .rx-select-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(12, 20, 45, 0.28);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.2s, transform 0.25s var(--rx-ease), visibility 0s 0.25s;
+  z-index: 11;
+}
+html.rx-page ._form-widget .rx-select-open .rx-select-list {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.2s, transform 0.25s var(--rx-ease);
+}
+html.rx-page ._form-widget .rx-select-list li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 46px;
+  padding: 0 40px 0 14px;
+  border-radius: 9px;
+  color: var(--rx-ink);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+html.rx-page ._form-widget .rx-select-list li.is-active {
+  background: #eef1f9;
+}
+html.rx-page ._form-widget .rx-select-list li.is-picked {
+  color: var(--rx-blue);
+  font-weight: 700;
+}
+html.rx-page ._form-widget .rx-select-list li.is-picked::after {
+  content: "";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  width: 6px;
+  height: 11px;
+  margin-top: -7px;
+  border: solid var(--rx-blue);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* 개인정보 동의: 긴 약관은 접어두고 '약관보기'로 연다 */
+html.rx-page ._form-widget .form-group.privacy {
+  margin-top: 4px !important;
+  padding: 0 18px;
+}
+html.rx-page ._form-widget .form-group.privacy > .control-label {
+  display: none !important;
+}
+html.rx-page ._form-widget .form-group.privacy > .form-control {
+  display: none;
+  height: auto !important;
+  max-height: 200px;
+  overflow: auto;
+  margin-bottom: 12px;
+  padding: 16px 18px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 13px !important;
+  line-height: 1.6;
+}
+html.rx-page ._form-widget .form-group.privacy.rx-open > .form-control {
+  display: block;
+  order: 2;
+}
+html.rx-page ._form-widget .form-group.privacy {
+  display: flex;
+  flex-direction: column;
+}
+html.rx-page ._form-widget .form-group.privacy .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 !important;
+}
+html.rx-page ._form-widget .form-group.privacy .checkbox label {
+  display: inline-block !important;
+  width: auto !important;
+}
+html.rx-page ._form-widget .checkbox label,
+html.rx-page ._form-widget .checkbox span {
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 600;
+}
+html.rx-page ._form-widget .checkbox-styled span::before {
+  border-color: #fff !important;
+  background: transparent !important;
+}
+/* 체크하면 흰 칸 + 네이비 체크 표시 */
+html.rx-page ._form-widget .checkbox-styled input:checked + span::before {
+  background: #fff !important;
+}
+html.rx-page ._form-widget .checkbox-styled input:checked + span::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 5px;
+  width: 6px;
+  height: 10px;
+  border: solid var(--rx-navy);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+html.rx-page ._form-widget .rx-terms-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 신청 버튼 */
+html.rx-page ._form-widget .form.text-center {
+  margin-top: 40px;
+  text-align: center !important;
+}
+html.rx-page ._form-widget ._input_form_submit {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 210px;
+  max-width: 70%;
+  height: 56px;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: #d7dceb !important;
+  color: var(--rx-navy) !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  transition: transform 0.3s var(--rx-ease), background 0.3s;
+}
+html.rx-page ._form-widget ._input_form_submit:hover {
+  background: #fff !important;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  html.rx-page ._form-widget .form-group > .control-label {
+    font-size: 17px !important;
+    left: 16px;
+  }
+  html.rx-page ._form-widget .form-control {
+    padding-left: 96px !important;
+    font-size: 17px !important;
+  }
+  html.rx-page ._form-widget .form-group.privacy {
+    padding: 0 4px;
+  }
+  html.rx-page ._form-widget .checkbox span,
+  html.rx-page ._form-widget .rx-terms-btn {
+    font-size: 14px !important;
+    letter-spacing: -0.03em;
+  }
+  html.rx-page ._form-widget .checkbox span {
+    word-break: keep-all; /* 단어 중간에서 줄이 바뀌지 않게 */
+  }
+  /* 설명 글: 폰에서도 PC처럼 두 줄. 줄이 화면 폭에 딱 맞게 rx.js가 글자 크기를 정함 */
+  .rx .rx-point p,
+  .rx .rx-intro__desc,
+  .rx .rx-space__desc {
+    font-size: 17px;
+    white-space: nowrap;
+  }
+  /* 혜택 카드 설명: 한 줄로 (rx.js가 칸에 맞게 글자 크기 조절) */
+  .rx .rx-gift__head span {
+    font-size: 13px;
+    white-space: nowrap;
+    width: 100%; /* 칸 폭 기준으로 넘침을 재서 글자 크기를 줄임 */
+  }
+  .rx .rx-gifts {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+  .rx .rx-gift__head {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .rx .rx-point__txt,
+  .rx .rx-intro__desc,
+  .rx .rx-space__desc {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* ============================================================
+   인터랙션 (rx.js가 html에 rx-js를 붙였을 때만 숨김 → 스크립트가 막혀도 내용은 보임)
+   ============================================================ */
+
+html.rx-js .rx [data-rx="up"],
+html.rx-js .rx [data-rx="pop"] {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.6s var(--rx-ease), transform 0.6s var(--rx-ease);
+  transition-delay: var(--rx-delay, 0s);
+}
+html.rx-js .rx [data-rx="pop"] {
+  transform: scale(0.6);
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 한 줄씩 아래에서 올라오기 */
+html.rx-js .rx [data-rx="line"] {
+  clip-path: inset(-0.2em -0.2em 100% -0.2em);
+  transform: translateY(0.6em);
+  transition: clip-path 0.7s var(--rx-ease), transform 0.7s var(--rx-ease);
+  transition-delay: var(--rx-delay, 0s);
+}
+
+/* 형광펜이 왼쪽부터 칠해지기 */
+html.rx-js .rx [data-rx="hl"]::before {
+  transform: scaleX(0);
+  transition: transform 0.6s var(--rx-ease);
+  transition-delay: calc(var(--rx-delay, 0s) + 0.25s);
+}
+html.rx-js .rx [data-rx="hl"] {
+  color: inherit;
+  transition: color 0.3s;
+  transition-delay: calc(var(--rx-delay, 0s) + 0.4s);
+}
+
+/* 필기체가 왼쪽부터 써지기 */
+html.rx-js .rx [data-rx="script"] {
+  clip-path: inset(-0.3em 100% -0.3em -0.3em);
+  transition: clip-path 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+  transition-delay: var(--rx-delay, 0s);
+}
+
+/* 정상가 취소선 긋기 */
+html.rx-js .rx [data-rx="strike"]::after {
+  transform: scaleX(0);
+  transition: transform 0.5s var(--rx-ease) 0.3s;
+}
+
+/* 사진이 살짝 줌아웃되며 나타나기 */
+html.rx-js .rx [data-rx="zoom"] img {
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 0.7s var(--rx-ease), transform 1.2s var(--rx-ease);
+}
+
+html.rx-js .rx .is-in[data-rx="up"],
+html.rx-js .rx .is-in[data-rx="pop"],
+html.rx-js .rx .is-in[data-rx="line"],
+html.rx-js .rx .is-in[data-rx="zoom"] img {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(-0.3em -0.3em -0.3em -0.3em);
+}
+html.rx-js .rx .is-in[data-rx="script"] {
+  clip-path: inset(-0.3em -0.3em -0.3em -0.3em);
+}
+html.rx-js .rx .is-in[data-rx="hl"]::before,
+html.rx-js .rx .is-in[data-rx="strike"]::after {
+  transform: none;
+}
+html.rx-js .rx .is-in[data-rx="hl"] {
+  color: var(--hl-fg, #fff);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.rx-js .rx [data-rx],
+  html.rx-js .rx [data-rx] img,
+  html.rx-js .rx [data-rx]::before,
+  html.rx-js .rx [data-rx]::after,
+  .rx-stage__copy > * {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+  html.rx-js .rx [data-rx="hl"] {
+    color: var(--hl-fg, #fff);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rx-float,
+  .rx-float .rx-float__dot,
+  .rx-float i {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   글꼴 고정: 아임웹 테마 글꼴이 덮어써도 한글은 전부 Pretendard
+   (영문 장식 문구·77.7 숫자·% 만 예외)
+   ============================================================ */
+html.rx-page .rx,
+html.rx-page .rx *,
+html.rx-page .rx-stage,
+html.rx-page .rx-stage *,
+html.rx-page .rx-float,
+html.rx-page .rx-float *,
+html.rx-page .rx-call,
+html.rx-page .rx-call *,
+html.rx-page ._form-widget,
+html.rx-page ._form-widget * {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif !important;
+}
+html.rx-page .rx .rx-script,
+html.rx-page .rx-stage .rx-stage__num em {
+  font-family: "Playfair Display", serif !important;
+}
+html.rx-page .rx .rx-event__num,
+html.rx-page .rx .rx-event__num small,
+html.rx-page .rx-stage .rx-stage__num,
+html.rx-page .rx-stage .rx-stage__num small {
+  font-family: "Bodoni Moda", serif !important;
+}
+html.rx-page .rx .rx-event__num > [data-count],
+html.rx-page .rx-stage .rx-stage__num > .rx-stage__val {
+  font-family: "Noto Serif Display", serif !important;
+}
+
+</style>
+</head>
+<body>
+  <div class="section_wrap"><main><div class="inside"><div class="doz_row"><div class="col-dz col-dz-12"><div>
+<!-- ============================================================
+     Rxpert 랜딩 — 코드 블록 1 (이벤트 / 인트로 / 가격 / 특징 / 공간 / 폼 제목)
+     이미지 주소는 build.py 가 images.json 값으로 바꿔 넣음 (src 의 img: 자리표시자)
+     ============================================================ -->
+<div class="rx" id="rx-landing">
+
+  <!-- PC 양옆 배경 (rx.js가 body 맨 앞으로 옮김, 모바일에서는 숨김) -->
+  <aside class="rx-stage" aria-hidden="true">
+    <div class="rx-stage__bg" style="background-image:url('img/lab-bg.png')"></div>
+    <div class="rx-stage__shade"></div>
+    <div class="rx-stage__copy">
+      <img class="rx-stage__logo" src="img/logo.png" alt="">
+      <p class="rx-stage__eyebrow">현대카드 고객 전용</p>
+      <p class="rx-stage__title">‘럭키세븐 EVENT’</p>
+      <p class="rx-stage__num"><em>up to~</em><span class="rx-stage__val">77.7</span><small>%</small></p>
+      <p class="rx-stage__date">11월 1일 ~ 소진 시까지</p>
+      <div class="rx-stage__btns">
+        <a href="#rx-form" class="rx-stage__btn rx-stage__btn--main" data-rx-scroll>상담 신청하기</a>
+        <a href="tel:02-6022-0897" class="rx-stage__btn">02-6022-0897</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 모바일 하단 플로팅 상담 버튼 (rx.js가 body 끝으로 옮김, 넓은 PC에서는 숨김) -->
+  <a href="#rx-form" class="rx-float" data-rx-scroll aria-label="상담 신청하기">
+    <b class="rx-float__dot" aria-hidden="true"></b>
+    <span>상담 신청하기</span>
+    <i aria-hidden="true"></i>
+  </a>
+
+  <!-- 1. 이벤트 -->
+  <section class="rx-sec rx-event">
+    <img class="rx-logo" src="img/logo.png" alt="Rxpert" data-rx="up">
+    <h2 class="rx-event__head">
+      <span class="rx-l" data-rx="line">오직 <mark class="rx-hl rx-hl--navy" data-rx="hl">현대카드 고객</mark>만을 위한</span>
+      <span class="rx-l rx-event__name" data-rx="line">‘럭키세븐 EVENT’</span>
+    </h2>
+    <p class="rx-event__num" data-rx="up">
+      <em class="rx-script" data-rx="script">up to~</em><span data-count="77.7" data-dec="1">77.7</span><small>%</small>
+    </p>
+    <p class="rx-event__date" data-rx="up">* 11월 1일 ~ 소진 시까지</p>
+    <div class="rx-event__visual" data-rx="zoom"><img src="img/hero-product.jpg" alt="Rxpert 캡슐 패키지"></div>
+    <div class="rx-gifts">
+      <div class="rx-gift" data-rx="up">
+        <div class="rx-gift__head">
+          <i class="rx-gift__no">1</i>
+          <strong>25만 원 상당 앰플 증정</strong>
+          <span>선착순 50명 한정</span>
+        </div>
+        <img src="img/gift-1.jpg" alt="커스터마이즈드 앰플 세트">
+      </div>
+      <div class="rx-gift" data-rx="up">
+        <div class="rx-gift__head">
+          <i class="rx-gift__no">2</i>
+          <strong>방문 고객 100% 증정</strong>
+          <span>유산균 앰플 미니어처 or 마스크팩</span>
+        </div>
+        <img src="img/gift-2.jpg" alt="유산균 앰플">
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 인트로 + 아이콘 -->
+  <section class="rx-sec rx-intro">
+    <img class="rx-logo" src="img/logo.png" alt="Rxpert" data-rx="up">
+    <h2 class="rx-intro__title">
+      <span class="rx-l" data-rx="line"><b>알엑스퍼트 스킨솔루션</b></span>
+      <span class="rx-l rx-intro__sub" data-rx="line">27가지 피부 타입별 맞춤 캡슐 사용</span>
+    </h2>
+    <p class="rx-intro__desc" data-rx="up">
+      하나. 관리 전 매니저가 피부에 맞는 캡슐을 처방합니다. <br>
+      둘. 관리 시 캡슐을 확인시켜 드린 후 개봉하여 관리합니다.
+    </p>
+    <div class="rx-intro__visual" data-rx="zoom"><img src="img/intro-capsule.jpg" alt="Tx 캡슐"></div>
+    <ul class="rx-icons">
+      <li data-rx="up"><img src="img/icon-1.png" alt=""><strong>꼼꼼한 피부 체크</strong><span>고해상 적외선 카메라와<br>스틱 피부 체크기 사용</span></li>
+      <li data-rx="up"><img src="img/icon-2.png" alt=""><strong>1:1 맞춤 캡슐</strong><span>피부 타입별 27가지<br>맞춤 캡슐로 관리</span></li>
+      <li data-rx="up"><img src="img/icon-3.png" alt=""><strong>간편한 예약</strong><span>네이버 예약으로<br>전화 문의 없이 간편하게</span></li>
+    </ul>
+  </section>
+
+  <!-- 3. 가격 (프로모션) -->
+  <section class="rx-sec rx-promo">
+    <header class="rx-sec__head">
+      <em class="rx-script" data-rx="script">promotion</em>
+      <h2>
+        <span class="rx-l rx-sec__lead" data-rx="line">스킨솔루션에서 만나는</span>
+        <span class="rx-l" data-rx="line"><b class="rx-blue">특별 할인</b> <b>프로모션</b></span>
+      </h2>
+    </header>
+
+    <article class="rx-plan">
+      <div class="rx-plan__txt" data-rx="up">
+        <span class="rx-plan__no">01</span>
+        <h3>수분 물광 피부</h3>
+        <p class="rx-plan__label">퓨리파잉</p>
+        <ul><li>매뉴얼 테크닉</li><li>크라이오 또는 LDM 관리</li><li>모델링 마스크 관리</li></ul>
+        <p class="rx-plan__was"><s data-rx="strike">정상가 170,000원</s></p>
+        <p class="rx-plan__now">혜택가 <b><span data-count="38000">38,000</span>원</b></p>
+      </div>
+      <div class="rx-plan__img" data-rx="zoom"><img src="img/promo-1.jpg" alt="수분 물광 피부 관리"></div>
+    </article>
+
+    <article class="rx-plan rx-plan--rev">
+      <div class="rx-plan__txt" data-rx="up">
+        <span class="rx-plan__no">02</span>
+        <h3>모공 트러블 케어</h3>
+        <p class="rx-plan__label">크리스탈 필링</p>
+        <ul><li>매뉴얼 테크닉</li><li>크라이오 기기 관리</li><li>모델링 마스크</li></ul>
+        <p class="rx-plan__was"><s data-rx="strike">정상가 350,000원</s></p>
+        <p class="rx-plan__now">혜택가 <b><span data-count="78000">78,000</span>원</b></p>
+      </div>
+      <div class="rx-plan__img" data-rx="zoom"><img src="img/promo-2.jpg" alt="모공 트러블 케어"></div>
+    </article>
+
+    <article class="rx-plan">
+      <div class="rx-plan__txt" data-rx="up">
+        <span class="rx-plan__no">03</span>
+        <h3>탄력 리프팅 케어</h3>
+        <p class="rx-plan__label">퓨리파잉 디톡스 마스크+스크럽</p>
+        <ul><li>매뉴얼 테크닉</li><li>써마 리프팅</li><li>LDM 피부 맞춤 앰플 관리</li><li>모델링 마스크</li></ul>
+        <p class="rx-plan__was"><s data-rx="strike">정상가 400,000원</s></p>
+        <p class="rx-plan__now">혜택가 <b><span data-count="130000">130,000</span>원</b></p>
+      </div>
+      <div class="rx-plan__img" data-rx="zoom"><img src="img/promo-3.jpg" alt="탄력 리프팅 케어"></div>
+    </article>
+
+    <article class="rx-plan rx-plan--rev">
+      <div class="rx-plan__txt" data-rx="up">
+        <span class="rx-plan__no">04</span>
+        <h3>10회 프로그램</h3>
+        <p class="rx-plan__label">매회 페이스+데코관리</p>
+        <ul class="rx-plan__list--sub"><li>바디 5회<small>(등/복부 택1)</small></li><li>알프팅 4회<small>(윤광, 볼륨_240만원상당)</small></li><li>써마 리프팅 3회<small>(탄력,V라인_120만원상당)</small></li><li>홈케어 제품지원<small>(75만원 상당)</small></li></ul>
+        <p class="rx-plan__was"><s data-rx="strike">정상가 4,000,000원</s></p>
+        <p class="rx-plan__now">혜택가 <b><span data-count="1500000">1,500,000</span>원</b></p>
+      </div>
+      <div class="rx-plan__img" data-rx="zoom"><img src="img/promo-4.jpg" alt="10회 프로그램"></div>
+    </article>
+  </section>
+
+  <!-- 4. 특징 -->
+  <section class="rx-sec rx-why">
+    <header class="rx-sec__head">
+      <em class="rx-script" data-rx="script">special</em>
+      <h2>
+        <span class="rx-l" data-rx="line"><b class="rx-blue">알엑스퍼트를</b></span>
+        <span class="rx-l" data-rx="line"><b>선택해야만 하는 이유</b></span>
+      </h2>
+      <p class="rx-sec__lead" data-rx="up">문제성 피부 관리 단 하나의 해답</p>
+    </header>
+
+    <div class="rx-point rx-point--1">
+      <div class="rx-point__img" data-rx="zoom"><img src="img/point-1.jpg" alt="피부 진단 장비"></div>
+      <div class="rx-point__txt">
+        <span class="rx-pill" data-rx="pop">POINT 01</span>
+        <h3 class="rx-l" data-rx="line">꼼꼼한 <mark class="rx-hl" data-rx="hl">피부 체크</mark></h3>
+        <p data-rx="up">고해상 적외선 카메라와 스틱 피부 체크기를 사용하여 <br><b>피부 속 깊은 곳까지 분석하고, 맞춤 케어가 진행</b>됩니다.</p>
+      </div>
+    </div>
+
+    <div class="rx-point rx-point--2">
+      <div class="rx-point__txt">
+        <span class="rx-pill" data-rx="pop">POINT 02</span>
+        <h3 class="rx-l" data-rx="line"><mark class="rx-hl" data-rx="hl">믿을 수 있는</mark> 제품</h3>
+        <p data-rx="up">알엑스퍼트 스킨솔루션은 스킨케어 전문 브랜드 <b>Rxpert</b>의 제품과 <br>프랑스 명품 스파 브랜드 <b>피토메르</b>의 제품으로 케어합니다.</p>
+      </div>
+      <div class="rx-point__img" data-rx="zoom"><img src="img/point-2.jpg" alt="Rxpert 제품 라인"></div>
+    </div>
+
+    <div class="rx-point rx-point--3">
+      <div class="rx-point__txt">
+        <span class="rx-pill" data-rx="pop">POINT 03</span>
+        <h3 class="rx-l" data-rx="line">20년 이상의 <mark class="rx-hl" data-rx="hl">피부 전문가</mark></h3>
+        <p data-rx="up">알엑스퍼트 스킨솔루션은 스킨케어 20년 이상 피부 관리를 <br>진행해 온 <b>테라피스트 선생님</b>들로 구성되어 있습니다.</p>
+      </div>
+      <div class="rx-point__img" data-rx="zoom"><img src="img/point-3.jpg" alt="피부 관리 장면"></div>
+    </div>
+
+    <div class="rx-point rx-point--4">
+      <div class="rx-point__img" data-rx="zoom"><img src="img/point-4.jpg" alt="Rxcapsule 캡슐 보관함"></div>
+      <div class="rx-point__txt">
+        <span class="rx-pill" data-rx="pop">POINT 04</span>
+        <h3 class="rx-l" data-rx="line"><mark class="rx-hl" data-rx="hl">개인별 맞춤</mark> 케어 플랜</h3>
+        <p data-rx="up">알엑스퍼트 스킨솔루션은 미백/탄력/보습/잡티 제거 등 <br><b>개인의 피부 상태에 따라 맞춤 솔루션</b>을 제안합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 공간 -->
+  <section class="rx-sec rx-space">
+    <header class="rx-sec__head">
+      <em class="rx-script" data-rx="script">place value</em>
+      <h2>
+        <span class="rx-l" data-rx="line"><b class="rx-blue">공간,</b> <b>가치를 더하다</b></span>
+        <span class="rx-l rx-sec__lead" data-rx="line">고객 라운지에서 여유로운 기다림.</span>
+      </h2>
+      <p class="rx-space__desc" data-rx="up"><b>1인실 및 커플룸으로 프라이빗한 관리</b>를 즐겨 보세요. <br>각 룸마다 개인 락커와 메이크업실이 함께합니다.</p>
+    </header>
+    <div class="rx-space__media">
+      <!-- 사진을 늘릴 때는 rx-slide 줄을 복사해서 이미지 이름만 바꾸면 됨 (점은 자동) -->
+      <div class="rx-space__img rx-slider" data-rx="zoom" data-rx-slider>
+        <div class="rx-slide is-on"><img src="img/space-1.jpg" alt="알엑스퍼트 라운지"></div>
+        <div class="rx-slide"><img src="img/space-2.jpg" alt="파우더룸"></div>
+        <div class="rx-slide"><img src="img/space-3.jpg" alt="1인 관리실"></div>
+        <div class="rx-slide"><img src="img/space-4.jpg" alt="관리실 복도"></div>
+        <div class="rx-slide"><img src="img/space-5.jpg" alt="제품 진열장"></div>
+        <div class="rx-slide"><img src="img/space-6.jpg" alt="알엑스퍼트 제품 월"></div>
+      </div>
+      <div class="rx-dots"></div>
+    </div>
+  </section>
+
+  <!-- 6. 입력폼 제목 (아래에 아임웹 폼 위젯 섹션이 이어짐) -->
+  <section class="rx-sec rx-formhead" id="rx-form">
+    <img class="rx-logo rx-logo--white" src="img/logo.png" alt="Rxpert" data-rx="up">
+    <h2 class="rx-l" data-rx="line">알엑스퍼트 스킨솔루션</h2>
+  </section>
+</div>
+
+  </div></div></div></div></main></div>
+
+  <div class="section_wrap"><main><div class="inside"><div class="doz_row"><div class="col-dz col-dz-12"><div doz_type="widget">
+    <div class="form-widget widget _form-widget"><div class="deadline-opacity">
+      <form onsubmit="return false">
+        <div class="form-group"><label class="control-label" for="f1">이름</label><input type="text" class="form-control" id="f1"></div>
+        <div class="form-group"><label class="control-label" for="f2">연령</label><input type="text" class="form-control" id="f2"></div>
+        <div class="form-group"><label class="control-label" for="f3">연락처</label><input type="text" class="form-control" id="f3"></div>
+        <div class="form-group"><label class="control-label" for="f4">피부고민</label><div class="form-select-wrap"><select class="form-control" id="f4"><option value="" selected>(선택)</option><option>수분 물광 피부</option><option>모공 트러블 케어</option><option>탄력 리프팅 케어</option><option>10회 프로그램</option></select></div></div>
+        <div class="form-group"><label class="control-label" for="f5">문의사항</label><textarea class="form-control" rows="3" id="f5"></textarea></div>
+        <div class="form-group privacy"><label class="control-label">개인정보 수집 및 이용 동의</label>
+          <div class="form-control">&lt;개인정보의 수집/이용내역&gt;<br>(미리보기용 약관 자리 — 실제 페이지에서는 아임웹 설정 문구가 나옵니다)</div>
+          <div class="checkbox checkbox-styled"><label><input type="checkbox"> <span>개인정보 수집 및 이용에 동의합니다.</span></label></div>
+        </div>
+      </form>
+      <div class="form text-center"><a href="javascript:;" class="btn btn-primary _input_form_submit"> 작성</a></div>
+    </div></div>
+  </div></div></div></div></main></div>
+
+  <div class="section_wrap"><main><div class="inside"><div class="doz_row"><div class="col-dz col-dz-12"><div>
+<!-- ============================================================
+     Rxpert 랜딩 — 코드 블록 2 (폼 아래 매장 정보)
+     ============================================================ -->
+<div class="rx rx-info-wrap">
+  <section class="rx-sec rx-info">
+    <div class="rx-info__loc" data-rx="up">
+      <strong>LOCATION</strong>
+      <p>서울특별시 강남구 언주로 860 서우프라퍼티 6층<br>주차 : 노블케어 요양병원 앞</p>
+    </div>
+    <div class="rx-info__cols" data-rx="up">
+      <div>
+        <strong>FOLLOW</strong>
+        <p>월-금 : 오전 10시~오후 8시<br>토 : 오전 9시~오후 4시</p>
+      </div>
+      <div>
+        <strong>CALL</strong>
+        <p><a href="tel:02-6022-0897">T. 02-6022-0897</a><br><a href="tel:010-3557-7346">P. 010-3557-7346</a></p>
+      </div>
+    </div>
+    <p class="rx-info__note" data-rx="up">*&nbsp;&nbsp;국공휴일 휴무</p>
+  </section>
+</div>
+
+  </div></div></div></div></main></div>
+<script>
+/* ============================================================
+   Rxpert 랜딩 — 인터랙션 + 아임웹 연결
+   ============================================================ */
+(function () {
+  "use strict";
+  if (window.__rxLanding) return; // 코드 블록이 두 개라도 한 번만 실행
+  window.__rxLanding = true;
+
+  /* ---------- 글꼴: 페이지 <head>에 직접 넣음 (코드 위젯 안 @import는 막힐 수 있음) ---------- */
+  var FONTS = [
+    "https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6..96,400&family=Noto+Serif+Display:ital,wght@1,600&family=Playfair+Display:ital@1&display=swap"
+  ];
+  FONTS.forEach(function (href) {
+    if (document.querySelector('link[href="' + href + '"]')) return;
+    var l = document.createElement("link");
+    l.rel = "stylesheet";
+    l.href = href;
+    document.head.appendChild(l);
+  });
+
+  var root = document.documentElement;
+  root.classList.add("rx-page", "rx-js");
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function ready(fn) {
+    if (document.readyState !== "loading") fn();
+    else document.addEventListener("DOMContentLoaded", fn);
+  }
+
+  /* ---------- 숫자 올라가기 (77.7, 가격) ---------- */
+  function countUp(el) {
+    if (el.__rxCounted) return;
+    el.__rxCounted = true;
+    var to = parseFloat(el.getAttribute("data-count"));
+    var dec = parseInt(el.getAttribute("data-dec") || "0", 10);
+    var fmt = function (v) {
+      return v.toLocaleString("ko-KR", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    };
+    if (reduce) return (el.textContent = fmt(to));
+    var dur = 1400;
+    var t0 = null;
+    function step(t) {
+      if (t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / dur);
+      var e = 1 - Math.pow(1 - p, 4);
+      el.textContent = fmt(to * e);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- 화면에 들어오면 is-in ---------- */
+  function setupReveal(scope) {
+    var items = scope.querySelectorAll("[data-rx], [data-count]");
+    // 같은 묶음 안에서 순서대로 조금씩 늦게 시작
+    var groups = scope.querySelectorAll(".rx-sec, .rx-sec__head, .rx-point__txt, .rx-gifts, .rx-icons, .rx-plan__txt");
+    groups.forEach(function (g) {
+      var n = 0;
+      g.querySelectorAll(":scope > [data-rx], :scope > * > [data-rx]").forEach(function (el) {
+        if (!el.style.getPropertyValue("--rx-delay")) el.style.setProperty("--rx-delay", n++ * 0.07 + "s");
+      });
+    });
+
+    function show(el) {
+      el.classList.add("is-in");
+      if (el.hasAttribute("data-count")) countUp(el);
+      el.querySelectorAll("[data-count]").forEach(countUp);
+    }
+
+    if (!("IntersectionObserver" in window)) return items.forEach(show);
+    // clip-path로 가려진 요소는 화면에 들어와도 감지가 안 돼서 부모를 대신 지켜본다
+    var waiting = new Map();
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          (waiting.get(en.target) || []).forEach(show);
+          waiting.delete(en.target);
+          io.unobserve(en.target);
+        });
+      },
+      { rootMargin: "0px 0px 10% 0px", threshold: 0 } // 화면 아래에 닿기 조금 전부터 시작
+    );
+    items.forEach(function (el) {
+      var type = el.getAttribute("data-rx");
+      var watch = type === "line" || type === "script" ? el.parentElement : el;
+      if (!waiting.has(watch)) waiting.set(watch, []);
+      waiting.get(watch).push(el);
+      io.observe(watch);
+    });
+  }
+
+  /* ---------- PC 양옆 배경: body 맨 앞으로 옮기기 ---------- */
+  function setupStage() {
+    var stage = document.querySelector(".rx-stage");
+    if (!stage || stage.parentNode === document.body) return;
+    document.body.insertBefore(stage, document.body.firstChild);
+    stage.removeAttribute("aria-hidden"); // PC 왼쪽 77.7은 숫자 올라가기 없이 그대로
+  }
+
+  /* ---------- 아이폰: 전화번호를 누르면 바로 걸리지 않게 확인창 먼저 (안드로이드는 원래 다이얼 화면으로 감) ---------- */
+  function setupCallConfirm() {
+    var ios = /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (!ios || window.__rxCall) return;
+    window.__rxCall = true;
+    var sheet = document.createElement("div");
+    sheet.className = "rx-call";
+    sheet.innerHTML =
+      '<div class="rx-call__box" role="dialog" aria-modal="true">' +
+      '<p class="rx-call__label">전화 상담</p>' +
+      '<p class="rx-call__num"></p>' +
+      '<a class="rx-call__go" href="#">전화 걸기</a>' +
+      '<button type="button" class="rx-call__cancel">취소</button>' +
+      "</div>";
+    document.body.appendChild(sheet);
+    var num = sheet.querySelector(".rx-call__num");
+    var go = sheet.querySelector(".rx-call__go");
+    function close() {
+      sheet.classList.remove("is-on");
+    }
+    sheet.addEventListener("click", function (e) {
+      if (e.target === sheet || e.target.closest(".rx-call__cancel")) close();
+    });
+    go.addEventListener("click", close);
+    document.addEventListener(
+      "click",
+      function (e) {
+        var a = e.target.closest && e.target.closest('a[href^="tel:"]');
+        if (!a || a === go) return;
+        e.preventDefault();
+        var tel = a.getAttribute("href");
+        num.textContent = tel.replace("tel:", "");
+        go.setAttribute("href", tel);
+        sheet.classList.add("is-on");
+      },
+      true
+    );
+  }
+
+  /* ---------- 모바일 하단 플로팅 상담 버튼: 첫 화면을 지나면 나오고, 폼이 보이면 숨김 ---------- */
+  function setupFloat() {
+    var btn = document.querySelector(".rx-float");
+    if (!btn || btn.parentNode === document.body) return;
+    document.body.appendChild(btn); // .rx 안에서는 position:fixed가 화면 기준이 아니라서 밖으로 뺌
+    var form = document.querySelector("#rx-form");
+    var formSeen = false;
+    function update() {
+      var past = window.scrollY > window.innerHeight * 0.6;
+      btn.classList.toggle("is-on", past && !formSeen);
+    }
+    if (form && "IntersectionObserver" in window) {
+      var formWidget = document.querySelector("._form-widget");
+      new IntersectionObserver(function (entries) {
+        formSeen = entries.some(function (en) {
+          return en.isIntersecting;
+        });
+        update();
+      }).observe(formWidget || form);
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+
+  /* ---------- '상담 신청하기' → 폼으로 부드럽게 이동 ---------- */
+  function setupScroll() {
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("[data-rx-scroll]");
+      if (!a) return;
+      var target = document.querySelector(a.getAttribute("href"));
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    });
+  }
+
+  /* ---------- 아임웹 입력폼: 디자인용 손질 (동작은 아임웹 그대로) ---------- */
+  function setupForms() {
+    document.querySelectorAll("._form-widget").forEach(function (w) {
+      if (w.__rxForm) return;
+      w.__rxForm = true;
+
+      // 선택 상자: 고르면 글자색 진하게 + 디자인된 목록
+      w.querySelectorAll("select.form-control").forEach(function (s) {
+        var sync = function () {
+          s.classList.toggle("rx-picked", !!s.value);
+        };
+        s.addEventListener("change", sync);
+        sync();
+        setupSelect(s);
+      });
+
+      // 개인정보 동의: 약관 접기 + '약관보기' 버튼
+      var privacy = w.querySelector(".form-group.privacy");
+      var box = privacy && privacy.querySelector(".checkbox");
+      if (box && !box.querySelector(".rx-terms-btn")) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "rx-terms-btn";
+        btn.textContent = "약관 보기";
+        btn.addEventListener("click", function () {
+          var open = privacy.classList.toggle("rx-open");
+          btn.textContent = open ? "약관 닫기" : "약관 보기";
+        });
+        box.appendChild(btn);
+      }
+
+      // 버튼 문구: 아임웹 기본값 '작성'일 때만 '신청하기'로
+      var submit = w.querySelector("._input_form_submit");
+      if (submit && submit.textContent.trim() === "작성") submit.textContent = "신청하기";
+    });
+  }
+
+  /* ---------- 선택 상자 목록 디자인: 실제 값은 아임웹 select 그대로 (보이는 목록만 새로 그림) ---------- */
+  var openSelect = null;
+  function setupSelect(s) {
+    var group = s.closest(".form-group") || s.parentNode;
+    var wrap = s.parentNode;
+    var list = document.createElement("ul");
+    list.className = "rx-select-list";
+    list.setAttribute("role", "listbox");
+    var items = [];
+    var active = -1;
+    Array.prototype.forEach.call(s.options, function (o, i) {
+      if (!o.value || o.disabled) return; // '(선택)' 같은 안내 문구는 목록에서 뺌
+      var li = document.createElement("li");
+      li.setAttribute("role", "option");
+      li.textContent = o.text;
+      li.__rxIndex = i;
+      li.addEventListener("click", function (e) {
+        e.stopPropagation();
+        pick(li);
+      });
+      li.addEventListener("mouseenter", function () {
+        mark(items.indexOf(li));
+      });
+      list.appendChild(li);
+      items.push(li);
+    });
+    if (!items.length) return;
+    wrap.appendChild(list);
+    group.classList.add("rx-select");
+
+    function mark(k) {
+      active = k;
+      items.forEach(function (li, j) {
+        li.classList.toggle("is-active", j === k);
+      });
+    }
+    function refresh() {
+      items.forEach(function (li) {
+        var on = li.__rxIndex === s.selectedIndex;
+        li.classList.toggle("is-picked", on);
+        li.setAttribute("aria-selected", on ? "true" : "false");
+      });
+    }
+    function open() {
+      if (openSelect && openSelect !== close) openSelect();
+      refresh();
+      var cur = -1;
+      items.forEach(function (li, j) {
+        if (li.__rxIndex === s.selectedIndex) cur = j;
+      });
+      mark(cur);
+      group.classList.add("rx-select-open");
+      openSelect = close;
+    }
+    function close() {
+      group.classList.remove("rx-select-open");
+      if (openSelect === close) openSelect = null;
+    }
+    function pick(li) {
+      s.selectedIndex = li.__rxIndex;
+      s.dispatchEvent(new Event("input", { bubbles: true }));
+      s.dispatchEvent(new Event("change", { bubbles: true }));
+      close();
+      s.focus();
+    }
+    wrap.addEventListener("click", function (e) {
+      e.stopPropagation();
+      group.classList.contains("rx-select-open") ? close() : open();
+    });
+    s.addEventListener("keydown", function (e) {
+      var isOpen = group.classList.contains("rx-select-open");
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        if (!isOpen) return open();
+        mark(Math.max(0, Math.min(items.length - 1, active + (e.key === "ArrowDown" ? 1 : -1))));
+      } else if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (isOpen && items[active]) pick(items[active]);
+        else open();
+      } else if (e.key === "Escape" || e.key === "Tab") {
+        close();
+      }
+    });
+    s.addEventListener("change", refresh);
+  }
+  document.addEventListener("click", function () {
+    if (openSelect) openSelect();
+  });
+
+  /* ---------- 공간 사진 슬라이드: 자동 넘김 + 점 + 밀어서 넘기기 ---------- */
+  function setupSliders() {
+    document.querySelectorAll("[data-rx-slider]").forEach(function (box) {
+      if (box.__rxSlider) return;
+      box.__rxSlider = true;
+      var slides = box.querySelectorAll(".rx-slide");
+      var dots = box.parentNode.querySelector(".rx-dots");
+      if (slides.length < 2) {
+        if (dots) dots.style.display = "none";
+        return;
+      }
+      var cur = 0;
+      var timer = null;
+      var btns = [];
+      slides.forEach(function (_, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.setAttribute("aria-label", i + 1 + "번 사진");
+        b.addEventListener("click", function () {
+          go(i);
+          restart();
+        });
+        dots.appendChild(b);
+        btns.push(b);
+      });
+      function go(i) {
+        cur = (i + slides.length) % slides.length;
+        slides.forEach(function (s, k) {
+          s.classList.toggle("is-on", k === cur);
+        });
+        btns.forEach(function (b, k) {
+          b.classList.toggle("is-on", k === cur);
+        });
+      }
+      function restart() {
+        clearInterval(timer);
+        if (!reduce) timer = setInterval(function () {
+          go(cur + 1);
+        }, 2500); // 2.5초마다 다음 사진
+      }
+      // 손가락·마우스로 끌어서 넘기기
+      var x0 = null;
+      box.addEventListener("pointerdown", function (e) {
+        x0 = e.clientX;
+        box.classList.add("is-drag");
+        if (box.setPointerCapture) box.setPointerCapture(e.pointerId); // 사진 밖에서 놓아도 인식
+      });
+      function end(e) {
+        box.classList.remove("is-drag");
+        if (x0 === null) return;
+        var dx = e.clientX - x0;
+        x0 = null;
+        if (Math.abs(dx) < 40) return;
+        go(cur + (dx < 0 ? 1 : -1));
+        restart();
+      }
+      box.addEventListener("pointerup", end);
+      box.addEventListener("pointercancel", function () {
+        x0 = null;
+        box.classList.remove("is-drag");
+      });
+      go(0);
+      restart();
+    });
+  }
+
+  /* ---------- 가격 카드: 1번 카드 높이를 최소 높이로 (글은 가운데) ---------- */
+  function setupPlans() {
+    var txts = document.querySelectorAll(".rx-plan__txt");
+    if (txts.length < 2 || txts[0].__rxPlan) return;
+    txts[0].__rxPlan = true;
+    function fit() {
+      txts.forEach(function (t) {
+        t.style.minHeight = "";
+      });
+      var h = txts[0].offsetHeight;
+      txts.forEach(function (t, i) {
+        if (i) t.style.minHeight = h + "px";
+      });
+    }
+    fit();
+    window.addEventListener("resize", fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit); // 글꼴이 늦게 와도 다시 맞춤
+  }
+
+  /* ---------- 폰: 설명 글을 두 줄 그대로, 화면 폭에 맞는 가장 큰 글자로 ---------- */
+  function setupFitText() {
+    if (window.__rxFit) return;
+    window.__rxFit = true;
+    // 같은 묶음은 같은 크기 (인트로 설명 = POINT 설명). min: 이보다 작아지면 줄이지 않고 두 줄로 넘김
+    var groups = [
+      { sel: ".rx-point p, .rx-intro__desc" },
+      { sel: ".rx-space__desc" },
+      { sel: ".rx-gift__head span", min: 12 }
+    ];
+    function fit() {
+      var phone = window.matchMedia("(max-width: 600px)").matches;
+      groups.forEach(function (g) {
+        var els = document.querySelectorAll(g.sel);
+        var size = Infinity;
+        els.forEach(function (el) {
+          el.style.fontSize = "";
+          el.style.whiteSpace = "";
+          if (!phone) return;
+          var base = parseFloat(getComputedStyle(el).fontSize); // CSS에 정한 기본 크기에서 시작
+          var ratio = el.scrollWidth > el.clientWidth ? (el.clientWidth / el.scrollWidth) * 0.97 : 1; // 넘칠 때만 줄임 (끝에 살짝 여유)
+          size = Math.min(size, Math.floor(base * ratio * 2) / 2);
+        });
+        if (!phone) return;
+        var wrap = g.min && size < g.min;
+        els.forEach(function (el) {
+          el.style.fontSize = (wrap ? g.min : size) + "px";
+          if (wrap) el.style.whiteSpace = "normal";
+        });
+      });
+    }
+    fit();
+    window.addEventListener("resize", fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  }
+
+  function init() {
+    setupStage();
+    setupCallConfirm();
+    setupFloat();
+    setupPlans();
+    setupFitText();
+    setupSliders();
+    setupForms();
+    document.querySelectorAll(".rx").forEach(function (el) {
+      if (el.__rxReveal) return;
+      el.__rxReveal = true;
+      setupReveal(el);
+    });
+  }
+
+  setupScroll();
+  ready(init);
+  window.addEventListener("load", init); // 아임웹이 위젯을 늦게 그려도 한 번 더
+})();
+</script>
+</body>
+</html>
