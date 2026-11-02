@@ -61,7 +61,7 @@
       ? `<iframe src="${w.page}" title="${esc(w.title)}"></iframe>`
       : w.video
       ?`<video src="${videoSrc(w)}" poster="${fullSrc(w)}" controls autoplay playsinline></video>`
-      : `<img src="${fullSrc(w)}" alt="${esc(w.title)}" width="${w.w}" height="${w.h}" style="--nat:${w.w * 2}px">`;
+      : `<img src="${fullSrc(w)}" alt="${esc(w.title)}" width="${w.w}" height="${w.h}" style="--nat:${w.w * 2}px"${w.h / w.w > 4 ? ' class="is-long" title="클릭하면 크게 보기"' : ''}>`;
     vBody.scrollTop = 0;
   };
   const open = (works, idx) => {
@@ -77,6 +77,14 @@
     vBody.innerHTML = '';
   };
   viewer.addEventListener('click', (e) => {
+    // 롱페이지: 기본은 줌아웃, 클릭하면 크게 (클릭한 위치 유지)
+    const long = e.target.closest('img.is-long');
+    if (long) {
+      const ratio = (e.clientY - vBody.getBoundingClientRect().top + vBody.scrollTop) / vBody.scrollHeight;
+      long.classList.toggle('zoomed');
+      vBody.scrollTop = ratio * vBody.scrollHeight - (e.clientY - vBody.getBoundingClientRect().top);
+      return;
+    }
     const act = e.target.closest('[data-act]')?.dataset.act;
     if (act === 'close') close();
     if (act === 'prev') show(cur - 1);
