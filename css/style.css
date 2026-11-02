@@ -307,6 +307,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .contact-lead { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 20px; }
 .contact-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
 .contact-list li { display: grid; grid-template-columns: 96px 1fr auto; align-items: center; gap: 12px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+/* 목록 선도 화면 오른쪽 끝까지 (모바일은 양쪽 끝까지) */
+.contents ol, .contact-list { margin-right: calc(-1 * var(--gutter)); }
+.contents li a, .contact-list li { padding-right: var(--gutter); }
 .contact-list .k { font-family: var(--f-en); font-size: var(--fs-c); color: var(--ink-2); }
 .contact-list .v { font-size: var(--fs-h3); font-weight: 600; word-break: break-all; }
 .contact-list a.v:hover { color: var(--accent-ink); }
@@ -416,6 +419,9 @@ body.lock { overflow: hidden; }
 /* ── 반응형 ── */
 @media (max-width: 900px) {
   .hero-foot, .contact-body { grid-template-columns: 1fr; }
+  .contents ol, .contact-list { margin-left: calc(-1 * var(--gutter)); }
+  .contents li a, .contact-list li { padding-left: var(--gutter); }
+  .contents li a:hover { padding-left: calc(var(--gutter) + 8px); }
   .feat { grid-template-columns: 1fr; }
   .feat:nth-child(even) .feat-media { order: 0; }
   .feat-media { height: 440px; }
