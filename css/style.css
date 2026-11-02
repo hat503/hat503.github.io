@@ -92,10 +92,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .logo { font-family: var(--f-en); font-weight: 900; font-size: calc(var(--fs-h3) * 1.5); line-height: 1; letter-spacing: -0.02em; }
 .logo i { font-style: normal; color: var(--accent-ink); }
 .nav { display: flex; gap: clamp(20px, 3.4vw, 48px); font-family: var(--f-en); font-size: var(--fs-bl); font-weight: 500; }
-.nav a { position: relative; padding: 4px 0; color: var(--ink-2); transition: color .2s; }
+.nav a { display: inline-flex; align-items: center; gap: 7px; padding: 4px 0; color: var(--ink-2); transition: color .2s; }
 .nav a:hover, .nav a[aria-current] { color: var(--ink); }
 .nav a[aria-current]::before {
-  content: ''; position: absolute; left: -14px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px;
+  content: ''; width: 7px; height: 7px; flex: none;
   border-radius: 0; background: var(--accent);
 }
 
@@ -477,7 +477,8 @@ body.lock { overflow: hidden; }
   .works-head p { display: none; }
 }
 @media (max-width: 520px) {
-  .nav { gap: 20px; }
+  .nav { gap: 16px; }
+  .logo { font-size: 24px; }
   .contact-list li { grid-template-columns: 1fr auto; }
   .contact-list .k { grid-column: 1 / -1; }
   .page-sub { flex-direction: column; gap: 4px; }
