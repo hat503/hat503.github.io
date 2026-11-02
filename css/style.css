@@ -163,18 +163,22 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--ink);
 }
 .hero-foot .intro .col-head { max-width: none; margin-left: calc(-1 * (var(--side) + var(--gutter))); padding-left: calc(var(--side) + var(--gutter)); margin-right: calc(-1 * var(--hf-gap)); }
-.hero-foot .contents .col-head { margin-right: calc(-1 * var(--gutter)); padding-right: var(--gutter); }
+.hero-foot .contents .col-head { margin-right: calc(-1 * var(--gutter)); padding-right: var(--gutter); margin-bottom: 0; }
 .intro p strong { color: var(--ink); font-weight: 600; }
 .intro-name .intro-lead { display: block; margin-bottom: 16px; }
 .intro .intro-text { font-size: var(--fs-h3); line-height: 1.7; max-width: none; }
 
-.contents { align-self: stretch; position: relative; }
+.contents { align-self: stretch; position: relative; margin-bottom: calc(-1 * var(--hf-pad)); }
 /* 두 칸 사이 세로선: 제목 줄 위 선부터 역량 줄 선까지 */
 .contents::before {
-  content: ""; position: absolute; top: 0; bottom: calc(-1 * var(--hf-pad));
+  content: ""; position: absolute; top: 0; bottom: 0;
   left: calc(-1 * var(--hf-gap) / 2); border-left: 1px solid var(--line);
 }
-.contents ol { list-style: none; margin: auto 0 0; padding: 0; }
+/* 목차는 제목 줄 바로 아래부터 역량 줄까지 칸을 꽉 채움 */
+.contents ol { list-style: none; margin: 0; padding: 0; flex: 1; display: flex; flex-direction: column; }
+.contents li { flex: 1; display: flex; }
+.contents li a { flex: 1; }
+.contents li:last-child a { border-bottom: 0; }
 .contents li a {
   display: grid; grid-template-columns: 96px 1fr auto; align-items: center;
   padding: 20px 0; border-bottom: 1px solid var(--line);
