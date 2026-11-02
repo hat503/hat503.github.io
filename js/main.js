@@ -115,7 +115,6 @@
           ${w.tags ? `<ul class="tags">${w.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
           <h3>${esc(w.title)}</h3>
           <p class="feat-desc">${esc(w.desc || '')}</p>
-          <button class="btn-view" data-i="${i}">전체 보기 <span aria-hidden="true">→</span></button>
         </div>
         <button class="feat-media" data-i="${i}" aria-label="${esc(w.title)} 전체 보기">
           <img src="${previewSrc(w)}" alt="" loading="lazy" width="${w.w}" height="${w.h}">
