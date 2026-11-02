@@ -89,7 +89,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
 }
-.logo { font-family: var(--f-en); font-weight: 900; font-size: var(--fs-h3); letter-spacing: -0.02em; }
+.logo { font-family: var(--f-en); font-weight: 900; font-size: calc(var(--fs-h3) * 1.5); line-height: 1; letter-spacing: -0.02em; }
 .logo i { font-style: normal; color: var(--accent-ink); }
 .nav { display: flex; gap: clamp(20px, 3.4vw, 48px); font-family: var(--f-en); font-size: var(--fs-bl); font-weight: 500; }
 .nav a { position: relative; padding: 4px 0; color: var(--ink-2); transition: color .2s; }
@@ -148,8 +148,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .hero-foot {
   --hf-gap: clamp(24px, 5vw, 80px);
   --hf-pad: clamp(56px, 8vw, 120px);
+  --hf-pad-b: clamp(32px, 3vw, 48px);
   display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--hf-gap);
-  padding: var(--hf-pad) 0;
+  padding: var(--hf-pad) 0 var(--hf-pad-b);
 }
 .intro-name { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 20px; }
 .intro-name small { display: block; font-family: var(--f-en); font-size: .42em; font-weight: 500; letter-spacing: 0; color: var(--ink-2); margin-top: 8px; }
@@ -168,23 +169,23 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .intro-name .intro-lead { display: block; margin-bottom: 16px; }
 .intro .intro-text { font-size: var(--fs-h3); line-height: 1.7; max-width: none; }
 
-.contents { align-self: stretch; position: relative; margin-bottom: calc(-1 * var(--hf-pad)); }
+.contents { align-self: stretch; position: relative; margin-bottom: calc(-1 * var(--hf-pad-b)); }
 /* 두 칸 사이 세로선: 제목 줄 위 선부터 역량 줄 선까지 */
 .contents::before {
   content: ""; position: absolute; top: 0; bottom: 0;
   left: calc(-1 * var(--hf-gap) / 2); border-left: 1px solid var(--line);
 }
 /* 목차는 제목 줄 바로 아래부터 역량 줄까지 칸을 꽉 채움 */
-.contents ol { list-style: none; margin: 0; padding: 0; flex: 1; display: flex; flex-direction: column; }
+.contents ol { list-style: none; margin: 0 0 0 calc(-1 * var(--hf-gap) / 2); padding: 0; flex: 1; display: flex; flex-direction: column; }
 .contents li { flex: 1; display: flex; }
 .contents li a { flex: 1; }
 .contents li:last-child a { border-bottom: 0; }
 .contents li a {
   display: grid; grid-template-columns: 96px 1fr auto; align-items: center;
-  padding: 20px 0; border-bottom: 1px solid var(--line);
+  padding: 14px 0 14px calc(var(--hf-gap) / 2); border-bottom: 1px solid var(--line);
   transition: padding .25s;
 }
-.contents li a:hover { padding-left: 8px; }
+.contents li a:hover { padding-left: calc(var(--hf-gap) / 2 + 8px); }
 .contents li a:hover .n { color: var(--accent-ink); }
 .contents .n { font-family: var(--f-en); font-weight: 600; font-size: var(--fs-c); color: var(--ink-2); }
 .contents .t { font-size: var(--fs-h3); font-weight: 600; }
@@ -331,6 +332,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .chip:hover { color: var(--ink); }
 .chip[aria-pressed="true"] { color: var(--accent-ink); font-weight: 700; }
+/* 선택된 탭: 앞에 파랑 네모점 */
+.chip[aria-pressed="true"]::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 8px; vertical-align: middle; background: var(--accent); }
 .chip[aria-pressed="true"]::after { transform: scaleX(1); }
 .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
 .gallery { padding-top: 28px; padding-bottom: clamp(64px, 9vw, 120px); }
