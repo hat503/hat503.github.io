@@ -321,7 +321,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .viewer-link[hidden] { display: none; }
 .viewer-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 32px var(--gutter) 64px; }
 .viewer-body img { margin: 0 auto; width: 100%; max-width: min(860px, var(--nat, 860px)); height: auto; }
-.viewer-body img.is-long { max-width: min(480px, var(--nat, 480px)); cursor: zoom-in; }
+.viewer-body img.is-long { max-width: min(380px, var(--nat, 380px)); cursor: zoom-in; }
 .viewer-body img.is-long.zoomed { max-width: min(860px, var(--nat, 860px)); cursor: zoom-out; }
 .viewer-body video { margin: auto; width: 100%; max-width: 1280px; max-height: calc(100vh - 140px); background: #000; }
 .viewer-body.is-video { display: flex; align-items: center; }
