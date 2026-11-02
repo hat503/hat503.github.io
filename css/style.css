@@ -173,7 +173,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .btn-view:hover { background: var(--accent); color: var(--on-accent); gap: 16px; }
 
-/* 긴 상세페이지 미리보기: 마우스 올리면 아래로 스크롤 */
+/* 긴 상세페이지 미리보기: 마우스 위치에 따라 위/아래로 스크롤 (main.js) */
 .feat-media {
   position: relative; display: block; width: 100%;
   height: clamp(420px, 46vw, 660px);
@@ -181,14 +181,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   background: var(--dark-2);
   cursor: zoom-in;
 }
-.feat-media img {
-  width: 100%; height: auto;
-  transform: translateY(0);
-  transition: transform var(--pan-dur, 6s) cubic-bezier(.45, .05, .35, 1);
-}
-.feat-media:hover img, .feat-media:focus-visible img { transform: translateY(var(--pan, 0px)); }
+.feat-media img { width: 100%; height: auto; will-change: transform; }
 .feat-media::after {
-  content: '마우스를 올리면 전체가 스크롤돼요';
+  content: '위·아래로 마우스를 움직여 보세요';
   position: absolute; left: 12px; bottom: 12px;
   font-size: 11px; padding: 5px 10px; border-radius: 99px;
   background: rgba(20, 20, 20, .72); color: #fff; backdrop-filter: blur(4px);

@@ -124,19 +124,32 @@
       </article>`).join('');
     bindCards(featRoot, feats);
 
-    // 미리보기 박스 높이에 맞춰 스크롤 거리/시간 계산
-    const setPan = () => {
-      featRoot.querySelectorAll('.feat-media').forEach((box) => {
-        const img = box.querySelector('img');
-        const boxH = box.clientHeight;
-        const imgH = box.clientWidth * (img.getAttribute('height') / img.getAttribute('width'));
-        const dist = Math.max(0, imgH - boxH);
-        box.style.setProperty('--pan', `-${dist}px`);
-        box.style.setProperty('--pan-dur', `${Math.min(14, Math.max(2, dist / 900))}s`);
+    // 미리보기 스크롤: 마우스가 위쪽이면 위로, 아래쪽이면 아래로. 손 떼면 바로 맨 위
+    const MAX_SPEED = 1600; // px/s (가장자리에 있을 때)
+    featRoot.querySelectorAll('.feat-media').forEach((box) => {
+      const img = box.querySelector('img');
+      let pos = 0, dir = 0, raf = 0, last = 0;
+      const maxPos = () => Math.max(0, box.clientWidth * (img.getAttribute('height') / img.getAttribute('width')) - box.clientHeight);
+      const tick = (t) => {
+        const dt = last ? (t - last) / 1000 : 0;
+        last = t;
+        pos = Math.min(maxPos(), Math.max(0, pos + dir * MAX_SPEED * dt));
+        img.style.transform = `translateY(${-pos}px)`;
+        raf = requestAnimationFrame(tick);
+      };
+      box.addEventListener('mousemove', (e) => {
+        const r = box.getBoundingClientRect();
+        const rel = (e.clientY - r.top) / r.height - 0.5; // -0.5(위) ~ 0.5(아래)
+        const DEAD = 0.12; // 가운데는 멈춤
+        dir = Math.abs(rel) < DEAD ? 0 : Math.sign(rel) * ((Math.abs(rel) - DEAD) / (0.5 - DEAD)) ** 1.5;
+        if (!raf) { last = 0; raf = requestAnimationFrame(tick); }
       });
-    };
-    setPan();
-    addEventListener('resize', setPan);
+      box.addEventListener('mouseleave', () => {
+        cancelAnimationFrame(raf);
+        raf = 0; dir = 0; pos = 0;
+        img.style.transform = '';
+      });
+    });
   }
 
   // ── 메인: 갤러리 미리보기 ──
