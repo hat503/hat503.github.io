@@ -34,7 +34,7 @@ window.WORKS = [
     link: 'https://bizgrida.co.kr/120',
     featured: 1,
     desc: '현대카드 고객 전용 이벤트를 알리는 피부관리 브랜드 랜딩페이지. 시안부터 코딩까지 직접 진행했고, 숫자가 올라가는 인터랙션과 PC 전용 사이드 영역, 상담 신청 폼까지 아임웹에 바로 붙일 수 있게 만들었습니다.',
-    tags: ['랜딩페이지', '웹 퍼블리싱', '뷰티'],
+    tags: ['랜딩페이지', '웹퍼블리싱', '바이브코딩', '뷰티'],
   },
   { title: '관악365치과의원 임플란트', cat: 'landing', img: 'assets/full/landing-01.png', thumb: 'assets/thumb/landing-01.jpg', w: 1000, h: 7060 },
   { title: 'LA VIE:UM 한강', cat: 'landing', img: 'assets/full/landing-02.png', thumb: 'assets/thumb/landing-02.jpg', w: 1000, h: 7726 },

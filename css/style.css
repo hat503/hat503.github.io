@@ -188,7 +188,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .feat h3 { font-size: clamp(26px, 3.4vw, 44px); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 20px; }
 .feat-desc { margin: 0 0 24px; color: #c9c8c2; max-width: 30em; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 32px; padding: 0; list-style: none; }
-.tags li { font-size: 12px; padding: 4px 11px; border: 1px solid var(--dark-line); border-radius: 0; color: var(--on-dark-2); }
+.tags { gap: 4px 14px; }
+.tags li { font-size: 14px; font-weight: 500; color: var(--accent-lt); }
+.tags li::before { content: '#'; }
 .btn-view {
   display: inline-flex; align-items: center; gap: 10px;
   font-family: var(--f-en); font-weight: 600; font-size: 14px;
