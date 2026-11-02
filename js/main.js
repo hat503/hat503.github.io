@@ -209,8 +209,82 @@
   // ── 역량 점 (data-level 개수만큼 채움, 5점 만점) ──
   document.querySelectorAll('.sk-dots').forEach((el) => {
     const lv = +el.dataset.level || 0;
-    el.innerHTML = Array.from({ length: 5 }, (_, i) => `<i${i < lv ? ' class="on"' : ''}></i>`).join('');
+    el.innerHTML = Array.from({ length: 5 }, (_, i) => `<i style="--i:${i}"${i < lv ? ' class="on"' : ''}></i>`).join('');
   });
+
+  // ══════════ 인터랙션 ══════════
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 큰 영문 타이틀을 글자 단위로 쪼갬 (로드 시 차례로 올라오고, 글자에 마우스 올리면 튐)
+  document.querySelectorAll('.hero-word, .page-word, .ft-word a').forEach((el) => {
+    let n = 0;
+    [...el.childNodes].forEach((node) => {
+      if (node.nodeType !== 3) { node.style.setProperty('--i', n++); node.classList.add('ch'); return; }
+      const frag = document.createDocumentFragment();
+      [...node.textContent].forEach((c) => {
+        const s = document.createElement('span');
+        s.className = 'ch';
+        s.style.setProperty('--i', n++);
+        s.textContent = c === ' ' ? ' ' : c;
+        frag.appendChild(s);
+      });
+      node.replaceWith(frag);
+    });
+    el.setAttribute('aria-label', el.textContent.replace(/ /g, ' '));
+  });
+
+  // 스크롤하면 나타나기
+  const revealSel = [
+    '.intro', '.contents', '.skills', '.works-head', '.feat', '.more-head', '#more-grid .card',
+    '.page-sub', '.contact-body > *', '.ft .label', '.ft-word', '.ft-row',
+  ].join(',');
+  const targets = [...document.querySelectorAll(revealSel)];
+  // 같은 줄에 있는 카드는 조금씩 늦게
+  document.querySelectorAll('#more-grid .card').forEach((c, i) => c.style.setProperty('--d', `${(i % 4) * 80}ms`));
+  document.querySelectorAll('.contact-body > *').forEach((c, i) => c.style.setProperty('--d', `${i * 120}ms`));
+
+  // 목차 숫자 카운트업
+  const countUp = (root) => root.querySelectorAll('[data-count]').forEach((el) => {
+    const to = +el.textContent;
+    if (reduce || !to) return;
+    const t0 = performance.now();
+    const step = (t) => {
+      const p = Math.min(1, (t - t0) / 900);
+      el.textContent = String(Math.round(to * (1 - (1 - p) ** 3))).padStart(2, '0');
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('motion');
+    targets.forEach((el) => el.setAttribute('data-reveal', ''));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        if (e.target.matches('.contents')) countUp(e.target);
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    targets.forEach((el) => io.observe(el));
+    // 첫 화면에 이미 보이는 것들은 바로 표시 (옵저버를 기다리지 않음)
+    targets.forEach((el) => {
+      if (el.getBoundingClientRect().top < innerHeight * 0.92) {
+        el.classList.add('in');
+        if (el.matches('.contents')) countUp(el);
+        io.unobserve(el);
+      }
+    });
+  }
+
+  // 스크롤 내리면 헤더에 그림자
+  const hd = document.querySelector('.hd');
+  if (hd) {
+    const onScroll = () => hd.classList.toggle('scrolled', scrollY > 8);
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
 
   // ── 사이드 라벨 연도 ──
   document.querySelectorAll('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
