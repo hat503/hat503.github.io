@@ -112,10 +112,9 @@
       <article class="feat">
         <div class="feat-text">
           <div class="feat-no">${String(i + 1).padStart(2, '0')}</div>
-          <p class="feat-cat">${catLabel(w.cat)}${w.year ? ' · ' + w.year : ''}</p>
+          ${w.tags ? `<ul class="tags">${w.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
           <h3>${esc(w.title)}</h3>
           <p class="feat-desc">${esc(w.desc || '')}</p>
-          ${w.tags ? `<ul class="tags">${w.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
           <button class="btn-view" data-i="${i}">전체 보기 <span aria-hidden="true">→</span></button>
         </div>
         <button class="feat-media" data-i="${i}" aria-label="${esc(w.title)} 전체 보기">

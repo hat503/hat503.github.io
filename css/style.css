@@ -195,11 +195,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   font-family: var(--f-en); font-weight: 800; font-size: var(--fs-c); color: var(--on-accent);
   background: var(--accent);
 }
-.feat-cat { font-size: var(--fs-c); letter-spacing: .04em; color: var(--on-dark-2); margin: 0 0 8px; }
 .feat h3 { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 20px; }
-.feat-desc { margin: 0 0 24px; color: #c9c8c2; max-width: 30em; }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 32px; padding: 0; list-style: none; }
-.tags { gap: 4px 14px; }
+.feat-desc { margin: 0 0 32px; color: #c9c8c2; max-width: 30em; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 10px; padding: 0; list-style: none; }
 .tags li { font-size: var(--fs-s); font-weight: 500; color: var(--accent-lt); }
 .tags li::before { content: '#'; }
 .btn-view {
