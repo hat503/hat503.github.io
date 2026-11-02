@@ -208,9 +208,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   content: ""; display: inline-block; width: .2em; height: .2em; margin-left: .06em;
   background: var(--accent);
 }
-.feat h3 { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 20px; }
+.feat h3 { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 10px; }
 .feat-desc { margin: 0; color: #c9c8c2; max-width: 30em; }
-.tags { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 2px; padding: 0; list-style: none; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 20px; padding: 0; list-style: none; }
 .tags li { font-size: var(--fs-s); font-weight: 500; color: var(--accent-lt); }
 .tags li::before { content: '#'; }
 .btn-view {

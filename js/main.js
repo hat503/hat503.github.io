@@ -112,8 +112,8 @@
       <article class="feat">
         <div class="feat-text">
           <div class="feat-no">${String(i + 1).padStart(2, '0')}</div>
-          ${w.tags ? `<ul class="tags">${w.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
           <h3>${esc(w.title)}</h3>
+          ${w.tags ? `<ul class="tags">${w.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
           <p class="feat-desc">${esc(w.desc || '')}</p>
         </div>
         <button class="feat-media" data-i="${i}" aria-label="${esc(w.title)} 전체 보기">
