@@ -322,7 +322,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .contents li a, .contact-list li { padding-right: var(--gutter); }
 .contact-list .k { font-family: var(--f-en); font-size: var(--fs-c); color: var(--ink-2); }
 .contact-list .v { font-size: var(--fs-h3); font-weight: 600; word-break: break-all; }
-.contact-list a.v:hover { color: var(--accent-ink); }
+/* 목차와 같은 호버: 살짝 밀리고 파랑, 링크는 화살표 */
+.contact-list li { transition: padding .25s; }
+.contact-list li:hover { padding-left: 8px; }
+.contact-list .k, .contact-list .v { transition: color .2s; }
+.contact-list li:hover .k, .contact-list li:hover .v { color: var(--accent-ink); }
+.contact-list a.v::after { content: " →"; opacity: 0; transition: opacity .25s; }
+.contact-list li:hover a.v::after { opacity: 1; }
 .copy {
   font-size: var(--fs-c); padding: 6px 12px; border-radius: 99px; border: 1px solid var(--line);
   transition: background .2s, border-color .2s;
@@ -426,7 +432,7 @@ body.lock { overflow: hidden; }
   .hero-foot, .contact-body { grid-template-columns: 1fr; }
   .contents ol, .contact-list { margin-left: calc(-1 * var(--gutter)); }
   .contents li a, .contact-list li { padding-left: var(--gutter); }
-  .contents li a:hover { padding-left: calc(var(--gutter) + 8px); }
+  .contents li a:hover, .contact-list li:hover { padding-left: calc(var(--gutter) + 8px); }
   .feat { grid-template-columns: 1fr; }
   .feat:nth-child(even) .feat-media { order: 0; }
   .feat-media { height: 440px; }
