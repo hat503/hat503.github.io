@@ -99,12 +99,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* ── HERO ── */
 .hero { padding-top: clamp(40px, 7vw, 96px); padding-bottom: 0; }
-.hero-meta {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-  font-size: 13px; color: var(--ink-2);
-  padding-bottom: 16px;
-}
-.hero-meta b { display: block; color: var(--ink); font-weight: 600; }
 .hero-word {
   font-family: var(--f-en); font-weight: 900;
   /* 컨테이너 폭에 'PORTFOLIO.'가 꽉 차도록 */
@@ -114,6 +108,31 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   white-space: nowrap;
 }
 .hero-word .dot { color: var(--accent); }
+/* 역량 */
+.skills {
+  list-style: none; margin: clamp(24px, 3vw, 40px) 0 0; padding: 18px 0;
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px clamp(24px, 3vw, 48px);
+  border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line);
+}
+.skills li { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.sk-icon {
+  flex: none; width: 36px; height: 36px; border-radius: 8px;
+  display: grid; place-items: center;
+  font-family: var(--f-en); font-weight: 800; font-size: 15px; letter-spacing: -0.02em;
+  background: var(--bg); color: var(--fg);
+}
+.sk-code { background: var(--ink); color: var(--paper); font-size: 12px; }
+.sk-figma { background: var(--ink); }
+.sk-figma svg { width: 14px; height: 21px; }
+.sk-name { font-family: var(--f-en); font-size: 15px; font-weight: 500; white-space: nowrap; }
+.sk-dots { margin-left: 6px; display: flex; gap: 5px; }
+.sk-dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.sk-dots i.on { background: var(--accent); }
+@media (max-width: 700px) {
+  .skills { flex-direction: column; }
+  .sk-dots { margin-left: auto; }
+}
+
 .hero-foot {
   display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(24px, 5vw, 80px);
   padding: clamp(32px, 5vw, 64px) 0 clamp(48px, 7vw, 96px);
@@ -326,7 +345,6 @@ body.lock { overflow: hidden; }
 
 /* ── 반응형 ── */
 @media (max-width: 900px) {
-  .hero-meta { grid-template-columns: repeat(2, 1fr); row-gap: 12px; }
   .hero-foot, .contact-body { grid-template-columns: 1fr; }
   .feat { grid-template-columns: 1fr; }
   .feat:nth-child(even) .feat-media { order: 0; }

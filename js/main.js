@@ -206,6 +206,12 @@
     });
   });
 
+  // ── 역량 점 (data-level 개수만큼 채움, 5점 만점) ──
+  document.querySelectorAll('.sk-dots').forEach((el) => {
+    const lv = +el.dataset.level || 0;
+    el.innerHTML = Array.from({ length: 5 }, (_, i) => `<i${i < lv ? ' class="on"' : ''}></i>`).join('');
+  });
+
   // ── 사이드 라벨 연도 ──
   document.querySelectorAll('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
 })();
