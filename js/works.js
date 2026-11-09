@@ -13,7 +13,6 @@
   - featured : 메인 Selected Works에 노출할 순서 (1, 2, 3… / 없으면 갤러리에만)
   - desc     : 메인에 들어갈 설명 (featured인 작업만 쓰면 됨)
   - tags     : 메인에 보이는 작은 태그 (선택)
-  - link     : 실제 웹페이지 주소 (선택, 전체 보기 화면에 '사이트 보기' 버튼)
   - page     : 코드로 만든 페이지 경로 (선택, 전체 보기에서 이미지 대신 실제 페이지를 띄움)
 */
 
@@ -31,7 +30,6 @@ window.WORKS = [
     title: '알엑스퍼트 스킨솔루션', cat: 'landing',
     page: 'works/rxpert/index.html', // 실제 코드로 만든 페이지 (전체 보기에서 그대로 실행)
     img: 'assets/full/landing-05.jpg', thumb: 'assets/thumb/landing-05-mockup.jpg', w: 1268, h: 19644,
-    link: 'https://bizgrida.co.kr/120',
     featured: 1,
     desc: '알엑스퍼트의 브랜드를 소개하는 랜딩페이지. 기획부터 바이브 코딩을 통한 웹 구현까지 직접 진행했으며 LMS 광고 페이지의 특성을 고려하여 모바일을 기준으로 작업했습니다.',
     tags: ['랜딩페이지', '웹퍼블리싱', '바이브코딩', '뷰티'],

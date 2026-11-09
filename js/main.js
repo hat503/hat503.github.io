@@ -13,18 +13,14 @@
   const PLAY = '<svg viewBox="0 0 16 18" fill="currentColor"><path d="M0 0l16 9-16 9z"/></svg>';
 
   // ── 카드 (갤러리 공통) ──
-  const card = (work, i) => {
-    const long = !work.video && work.h / work.w > 4;
-    return `
+  const card = (work, i) => `
       <button class="card${work.video ? ' is-video' : ''}" data-i="${i}" style="animation-delay:${Math.min(i, 12) * 30}ms">
         <div class="card-img">
           <img src="${thumbSrc(work)}" alt="${esc(work.title)}" loading="lazy" width="600" height="800">
           ${work.video ? `<span class="card-play">${PLAY}</span>` : ''}
-          ${long ? '<span class="long">LONG PAGE</span>' : ''}
         </div>
         <div class="card-meta"><b>${esc(work.title)}</b><span>${catLabel(work.cat)}</span></div>
       </button>`;
-  };
 
   // ── 뷰어 ──
   let list = [];
@@ -37,7 +33,6 @@
     <div class="viewer-bar">
       <div class="viewer-title"></div>
       <div class="viewer-ctrl">
-        <a class="viewer-link" target="_blank" rel="noopener" hidden>사이트 보기 ↗</a>
         <button data-act="prev" aria-label="이전 작업"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 3L5 8l5 5"/></svg></button>
         <button data-act="next" aria-label="다음 작업"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3l5 5-5 5"/></svg></button>
         <button data-act="close" aria-label="닫기"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
@@ -47,7 +42,6 @@
   document.body.appendChild(viewer);
   const vTitle = viewer.querySelector('.viewer-title');
   const vBody = viewer.querySelector('.viewer-body');
-  const vLink = viewer.querySelector('.viewer-link');
 
   const show = (idx) => {
     cur = (idx + list.length) % list.length;
@@ -55,8 +49,6 @@
     vTitle.innerHTML = `${esc(w.title)}<span>${catLabel(w.cat)} · ${cur + 1} / ${list.length}</span>`;
     vBody.classList.toggle('is-video', !!w.video);
     vBody.classList.toggle('is-page', !!w.page);
-    vLink.hidden = !w.link;
-    if (w.link) vLink.href = w.link;
     vBody.innerHTML = w.page
       ? `<iframe src="${w.page}" title="${esc(w.title)}"></iframe>`
       : w.video
