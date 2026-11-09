@@ -9,6 +9,9 @@
   const previewSrc = (work) => work.img;
   const videoSrc = (work) => work.video;
 
+  // 이미지가 아직 없는 작업은 대표작에만 나옴 (갤러리·전체 보기 제외)
+  const VIEWABLE = WORKS.filter((w) => w.img);
+
   const esc = (s = '') => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const PLAY = '<svg viewBox="0 0 16 18" fill="currentColor"><path d="M0 0l16 9-16 9z"/></svg>';
 
@@ -43,6 +46,9 @@
   const vTitle = viewer.querySelector('.viewer-title');
   const vBody = viewer.querySelector('.viewer-body');
 
+  const imageTag = (src, w, title) =>
+    `<img src="${src}" alt="${esc(title)}" loading="lazy" width="${w.w}" height="${w.h}" style="--nat:${w.w * 2}px"${w.h / w.w > 4 ? ' class="is-long" title="클릭하면 크게 보기"' : ''}>`;
+
   const show = (idx) => {
     cur = (idx + list.length) % list.length;
     const w = list[cur];
@@ -53,7 +59,9 @@
       ? `<iframe src="${w.page}" title="${esc(w.title)}"></iframe>`
       : w.video
       ?`<video src="${videoSrc(w)}" poster="${fullSrc(w)}" controls autoplay playsinline></video>`
-      : `<img src="${fullSrc(w)}" alt="${esc(w.title)}" width="${w.w}" height="${w.h}" style="--nat:${w.w * 2}px"${w.h / w.w > 4 ? ' class="is-long" title="클릭하면 크게 보기"' : ''}>`;
+      : w.images
+      ? w.images.map((im) => imageTag(im.img, im, w.title)).join('')
+      : imageTag(fullSrc(w), w, w.title);
     vBody.scrollTop = 0;
   };
   const open = (works, idx) => {
@@ -100,23 +108,29 @@
   const featRoot = document.getElementById('featured');
   if (featRoot) {
     const feats = WORKS.filter((w) => w.featured).sort((a, b) => a.featured - b.featured);
+    const viewable = feats.filter((w) => w.img); // 전체 보기에서 이전/다음으로 넘길 작업
     featRoot.innerHTML = feats.map((w, i) => `
       <article class="feat">
         <div class="feat-text">
           <div class="feat-no">${String(i + 1).padStart(2, '0')}</div>
           <h3>${esc(w.title)}</h3>
           ${w.tags ? `<ul class="tags">${w.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
-          <p class="feat-desc">${esc(w.desc || '')}</p>
+          ${w.caseStudy
+            ? `<dl class="case">${w.caseStudy.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>`
+            : `<p class="feat-desc">${esc(w.desc || '')}</p>`}
+          ${w.site ? `<a class="link-arrow case-link" href="${w.site}" target="_blank" rel="noopener">${esc(w.site.replace(/^https?:\/\//, ''))}</a>` : ''}
         </div>
-        <button class="feat-media" data-i="${i}" aria-label="${esc(w.title)} 전체 보기">
+        ${w.img
+          ? `<button class="feat-media" data-i="${viewable.indexOf(w)}" aria-label="${esc(w.title)} 전체 보기">
           <img src="${previewSrc(w)}" alt="" loading="lazy" width="${w.w}" height="${w.h}">
-        </button>
+        </button>`
+          : '<div class="feat-media is-empty" aria-hidden="true"></div>'}
       </article>`).join('');
-    bindCards(featRoot, feats);
+    bindCards(featRoot, viewable);
 
     // 미리보기 스크롤: 마우스가 위쪽이면 위로, 아래쪽이면 아래로. 손 떼면 바로 맨 위
     const MAX_SPEED = 1600; // px/s (가장자리에 있을 때)
-    featRoot.querySelectorAll('.feat-media').forEach((box) => {
+    featRoot.querySelectorAll('button.feat-media').forEach((box) => {
       const img = box.querySelector('img');
       let pos = 0, dir = 0, raf = 0, last = 0;
       const maxPos = () => Math.max(0, box.clientWidth * (img.getAttribute('height') / img.getAttribute('width')) - box.clientHeight);
@@ -145,7 +159,7 @@
   // ── 메인: 갤러리 미리보기 ──
   const moreRoot = document.getElementById('more-grid');
   if (moreRoot) {
-    const pick = WORKS.filter((w) => !w.featured).slice(0, 8);
+    const pick = VIEWABLE.filter((w) => !w.featured).slice(0, 8);
     moreRoot.innerHTML = pick.map(card).join('');
     bindCards(moreRoot, pick);
   }
@@ -153,20 +167,20 @@
   // ── 카운트 표시 ──
   document.querySelectorAll('[data-count]').forEach((el) => {
     const k = el.dataset.count;
-    el.textContent = String(k === 'all' ? WORKS.length : k === 'featured' ? WORKS.filter((w) => w.featured).length : WORKS.filter((w) => w.cat === k).length).padStart(2, '0');
+    el.textContent = String(k === 'all' ? VIEWABLE.length : k === 'featured' ? WORKS.filter((w) => w.featured).length : VIEWABLE.filter((w) => w.cat === k).length).padStart(2, '0');
   });
 
   // ── 갤러리 페이지 ──
   const galRoot = document.getElementById('gallery-grid');
   const filterRoot = document.getElementById('filters');
   if (galRoot && filterRoot) {
-    const cats = [{ key: 'all', label: '전체' }, ...CATEGORIES.filter((c) => WORKS.some((w) => w.cat === c.key))];
+    const cats = [{ key: 'all', label: '전체' }, ...CATEGORIES.filter((c) => VIEWABLE.some((w) => w.cat === c.key))];
     filterRoot.innerHTML = `<div class="tabs"><div class="tabs-inner">${cats.map((c) => `
       <button class="chip" data-cat="${c.key}" aria-pressed="false">${c.label}</button>`).join('')}</div></div>`;
 
-    let shown = WORKS;
+    let shown = VIEWABLE;
     const render = (key) => {
-      shown = key === 'all' ? WORKS : WORKS.filter((w) => w.cat === key);
+      shown = key === 'all' ? VIEWABLE : VIEWABLE.filter((w) => w.cat === key);
       galRoot.innerHTML = shown.map(card).join('');
       filterRoot.querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', b.dataset.cat === key));
     };

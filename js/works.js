@@ -14,6 +14,9 @@
   - desc     : 메인에 들어갈 설명 (featured인 작업만 쓰면 됨)
   - tags     : 메인에 보이는 작은 태그 (선택)
   - page     : 코드로 만든 페이지 경로 (선택, 전체 보기에서 이미지 대신 실제 페이지를 띄움)
+  - images   : 한 프로젝트로 묶을 이미지 목록 (선택, 전체 보기에서 위아래로 이어서 보여줌)
+  - caseStudy: 케이스 스터디 항목 [제목, 내용] 목록 (선택, desc 대신 표시)
+  - site     : 실제 사이트 주소 (선택, 케이스 스터디 아래 링크)
 */
 
 window.CATEGORIES = [
@@ -25,12 +28,40 @@ window.CATEGORIES = [
 ];
 
 window.WORKS = [
+  // ── 케이스 스터디 ──
+  {
+    title: '비즈그리다 홈페이지 리뉴얼 & 디자인 시스템', cat: 'brand',
+    img: 'assets/full/biz-main.jpg', thumb: 'assets/thumb/biz-main.jpg', w: 1440, h: 8587,
+    // 홈, 디자인 시스템, 서비스 페이지 순서
+    images: [
+      { img: 'assets/full/biz-main.jpg', w: 1440, h: 8587 },
+      { img: 'assets/full/biz-system.png', w: 1400, h: 11565 },
+      { img: 'assets/full/biz-targeting.jpg', w: 1440, h: 10018 },
+      { img: 'assets/full/biz-app.jpg', w: 1440, h: 5507 },
+      { img: 'assets/full/biz-elevator.jpg', w: 1440, h: 6995 },
+      { img: 'assets/full/biz-iptv.jpg', w: 1440, h: 6940 },
+      { img: 'assets/full/biz-live.jpg', w: 1440, h: 6360 },
+      { img: 'assets/full/biz-research.jpg', w: 1440, h: 6082 },
+      { img: 'assets/full/biz-designservice.jpg', w: 1440, h: 9684 },
+    ],
+    featured: 1,
+    tags: ['홈페이지 리뉴얼', '디자인 시스템', '아임웹'],
+    site: 'https://bizgrida.co.kr',
+    caseStudy: [
+      ['문제', '서비스 페이지마다 톤이 제각각이고, 새 페이지를 매번 처음부터 만들어야 했습니다. 내세울 실적 데이터가 적은 B2B 회사였습니다.'],
+      ['제약', '디자이너 1인, 아임웹 빌더 환경.'],
+      ['한 일', '홈·서비스 등 10여 개 페이지를 직접 기획해 리뉴얼했습니다. 색상·타이포·간격·버튼 위계·상태·모션 규칙을 담은 디자인 시스템을 처음부터 만들고 아임웹 커스텀 CSS로 구현했습니다.'],
+      ['결과', '페이지 제작 시간 약 30% 단축.'],
+      ['역할', '기획·디자인·구현 1인'],
+    ],
+  },
+
   // ── 랜딩페이지 ──
   {
     title: '알엑스퍼트 스킨솔루션', cat: 'landing',
     page: 'works/rxpert/index.html', // 실제 코드로 만든 페이지 (전체 보기에서 그대로 실행)
     img: 'assets/full/landing-05.jpg', thumb: 'assets/thumb/landing-05-mockup.jpg', w: 1268, h: 19644,
-    featured: 1,
+    featured: 2,
     desc: '알엑스퍼트의 브랜드를 소개하는 랜딩페이지. 기획부터 바이브 코딩을 통한 웹 구현까지 직접 진행했으며 LMS 광고 페이지의 특성을 고려하여 모바일을 기준으로 작업했습니다.',
     tags: ['랜딩페이지', '웹퍼블리싱', '바이브코딩', '뷰티'],
   },
@@ -43,14 +74,14 @@ window.WORKS = [
   {
     title: '이지드로잉 키즈 카메라', cat: 'detail',
     img: 'assets/full/detail-01.jpg', thumb: 'assets/thumb/detail-01.jpg', w: 1200, h: 38290,
-    featured: 2,
+    featured: 4,
     desc: '아이와 부모가 함께 보는 키즈 카메라의 제품 상세페이지. 8가지 기능을 단계별로 나눠 보여주고, 밝은 파스텔 톤과 캐릭터 일러스트로 친근하게 풀었습니다.',
     tags: ['상세페이지', '키즈', '전자기기'],
   },
   {
-    title: '알러지케어 침구', cat: 'detail',
+    title: '나노케어 알러브릭 침구', cat: 'detail',
     img: 'assets/full/detail-02.jpg', thumb: 'assets/thumb/detail-02.jpg', w: 966, h: 11615,
-    featured: 4,
+    featured: 5,
     desc: '알러지 케어 기능을 강조한 침구 상세페이지. 차분한 화이트·네이비 톤에 기능 아이콘을 정리해 기능성 정보를 한눈에 읽히도록 구성했습니다.',
     tags: ['상세페이지', '리빙', '침구'],
   },
@@ -65,22 +96,23 @@ window.WORKS = [
   {
     title: 'BIG SALE 주문폭주 기획전', cat: 'brand',
     img: 'assets/full/event-01.png', thumb: 'assets/thumb/event-01.jpg', w: 540, h: 3359,
-    featured: 5,
-    desc: '최대 80% 할인 기획전 페이지. 강한 그라디언트와 스티커형 그래픽으로 세일 분위기를 만들고, 상품 리스트는 카드형으로 정리해 구매 동선을 짧게 잡았습니다.',
-    tags: ['기획전', '프로모션'],
   },
   { title: 'Merry Christmas 이벤트', cat: 'brand', img: 'assets/full/event-02.png', thumb: 'assets/thumb/event-02.jpg', w: 540, h: 4143 },
   {
-    title: '2024 바로선행 리포트', cat: 'brand',
-    img: 'assets/full/brand-01.png', thumb: 'assets/thumb/brand-01.jpg', w: 600, h: 7177, year: 2024,
+    title: 'PURKIN 리브랜딩 프로젝트', cat: 'brand',
+    img: 'assets/full/brand-02.png', thumb: 'assets/thumb/brand-02.jpg', w: 600, h: 4718,
+    // Pure Kind PURKIN, PURKIN Supporters, 펄킨 서포터즈, 지구의 날 Earth Day, 2024 바로선행 리포트
+    images: [
+      { img: 'assets/full/brand-02.png', w: 600, h: 4718 },
+      { img: 'assets/full/brand-03.png', w: 600, h: 6496 },
+      { img: 'assets/full/brand-05.png', w: 600, h: 6036 },
+      { img: 'assets/full/brand-04.png', w: 600, h: 5745 },
+      { img: 'assets/full/brand-01.png', w: 600, h: 7177 },
+    ],
     featured: 3,
-    desc: '한 해 동안의 나눔 활동을 정리한 연간 리포트 페이지. 다크 톤 배경 위에 숫자와 인포그래픽을 배치해 활동 성과가 먼저 눈에 들어오도록 설계했습니다.',
-    tags: ['캠페인', '인포그래픽'],
+    desc: '플랫폼 \'에코후레쉬\'를 \'PURKIN\'으로 리브랜딩. 브랜드 정체성이 불명확하다는 문제를 제기하고 마케팅팀과 톤앤매너를 재정립. "소비로 나의 가치를 만든다" 슬로건 아래 선행 주제 콘텐츠를 기획·디자인.',
+    tags: ['리브랜딩', '브랜드 콘텐츠'],
   },
-  { title: 'Pure Kind PURKIN', cat: 'brand', img: 'assets/full/brand-02.png', thumb: 'assets/thumb/brand-02.jpg', w: 600, h: 4718 },
-  { title: 'PURKIN Supporters', cat: 'brand', img: 'assets/full/brand-03.png', thumb: 'assets/thumb/brand-03.jpg', w: 600, h: 6496 },
-  { title: '지구의 날 Earth Day', cat: 'brand', img: 'assets/full/brand-04.png', thumb: 'assets/thumb/brand-04.jpg', w: 600, h: 5745 },
-  { title: '펄킨 서포터즈', cat: 'brand', img: 'assets/full/brand-05.png', thumb: 'assets/thumb/brand-05.jpg', w: 600, h: 6036 },
 
   // ── 배너 ──
   { title: 'Cozy Studio 피드', cat: 'banner', img: 'assets/full/sns-01.jpg', thumb: 'assets/thumb/sns-01.jpg', w: 1920, h: 1920 },

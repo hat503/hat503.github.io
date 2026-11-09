@@ -226,6 +226,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .feat h3 { font-size: var(--fs-h1); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin: 0 0 10px; }
 .feat-desc { margin: 0; color: #c9c8c2; max-width: 30em; }
+/* 케이스 스터디: 항목 이름 + 내용 */
+.case { margin: 0; max-width: 34em; }
+.case > div { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-top: 1px solid var(--dark-line); }
+.case > div:first-child { border-top: 0; padding-top: 0; }
+.case dt { font-size: var(--fs-s); font-weight: 600; color: var(--accent-lt); line-height: 1.7; }
+.case dd { margin: 0; color: #c9c8c2; }
+.case-link { margin-top: 20px; color: var(--on-dark); }
+.feat-media.is-empty { cursor: default; }
+.feat-media.is-empty::after { content: none; }
 .tags { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 20px; padding: 0; list-style: none; }
 .tags li { font-size: var(--fs-s); font-weight: 500; color: var(--accent-lt); }
 .tags li::before { content: '#'; }
@@ -392,6 +401,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .viewer-ctrl svg { width: 16px; height: 16px; }
 .viewer-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 32px var(--gutter) 64px; }
 .viewer-body img { margin: 0 auto; width: 100%; max-width: min(860px, var(--nat, 860px)); height: auto; }
+.viewer-body img + img { margin-top: 24px; }
 .viewer-body img.is-long { max-width: min(380px, var(--nat, 380px)); cursor: zoom-in; }
 .viewer-body img.is-long.zoomed { max-width: min(860px, var(--nat, 860px)); cursor: zoom-out; }
 .viewer-body video { margin: auto; width: 100%; max-width: 1280px; max-height: calc(100vh - 140px); background: #000; }
@@ -476,6 +486,7 @@ body.lock { overflow: hidden; }
   .feat { grid-template-columns: 1fr; }
   .feat:nth-child(even) .feat-media { order: 0; }
   .feat-media { height: 440px; }
+  .feat-media.is-empty { height: 240px; }
   .works-head p { display: none; }
 }
 @media (max-width: 520px) {
