@@ -49,22 +49,100 @@
   const imageTag = (src, w, title, zoom = true) =>
     `<img src="${src}" alt="${esc(title)}" loading="lazy" width="${w.w}" height="${w.h}" style="--nat:${w.w * 2}px"${zoom && w.h / w.w > 4 ? ' class="is-long" title="클릭하면 크게 보기"' : ''}>`;
 
-  // 리뉴얼 전/후 비교: PC는 좌우 두 창, 모바일은 탭
-  const compareTag = (w) => `
-    <div class="cmp-tabs" role="tablist">
-      <button role="tab" data-tab="before" aria-selected="true">리뉴얼 전</button>
-      <button role="tab" data-tab="after" aria-selected="false">리뉴얼 후</button>
-    </div>
-    <div class="cmp">
-      <section class="cmp-col is-on" data-col="before">
-        <p class="cmp-label">리뉴얼 전</p>
-        ${w.before.map((im) => imageTag(im.img, im, `${w.title} 리뉴얼 전`, false)).join('')}
-      </section>
-      <section class="cmp-col" data-col="after">
-        <p class="cmp-label">리뉴얼 후</p>
-        ${w.images.map((im) => imageTag(im.img, im, `${w.title} 리뉴얼 후`, false)).join('')}
-      </section>
-    </div>`;
+  // ── 리뉴얼 전/후 비교 ──
+  // PC: 짝지은 페이지(홈·리서치)를 좌우로 놓고, 한 번의 스크롤로 두 창이 같은 페이지의 시작과 끝을 맞춰 내려감
+  //     → 끝나면 두 창이 하나로 합쳐지고, 리뉴얼한 페이지를 탭으로 하나씩 봄
+  // 모바일: 탭만 (리뉴얼 전 + 리뉴얼한 페이지들)
+  const MERGE_LEN = 500; // 합쳐지는 데 쓰는 스크롤 거리(px)
+  const isMobile = () => matchMedia('(max-width: 700px)').matches;
+  let cmpUpdate = null; // 창 크기가 바뀌면 다시 계산
+
+  const comparePages = (w, mobile) => [
+    ...(mobile ? [{ name: '리뉴얼 전', imgs: w.before }] : []),
+    ...w.images.map((im) => ({ name: im.name, imgs: [im] })),
+  ];
+
+  const compareTag = (w) => {
+    const n = w.before.length;
+    const strip = (arr, side) => arr.slice(0, n)
+      .map((im) => `<img src="${im.img}" alt="${esc(`${w.title} ${side} ${im.name || ''}`)}" width="${im.w}" height="${im.h}">`).join('');
+    const pages = comparePages(w, isMobile());
+    return `
+      <div class="cmp-scroll">
+        ${isMobile() ? '' : `
+        <div class="cmp-track">
+          <div class="cmp-sticky">
+            <div class="cmp-col" data-col="before"><p class="cmp-label">리뉴얼 전</p><div class="cmp-strip">${strip(w.before, '리뉴얼 전')}</div></div>
+            <div class="cmp-col" data-col="after"><p class="cmp-label">리뉴얼 후</p><div class="cmp-strip">${strip(w.images, '리뉴얼 후')}</div></div>
+          </div>
+        </div>`}
+        <section class="cmp-pages">
+          <div class="cmp-pages-tabs" role="tablist">
+            ${pages.map((p, i) => `<button role="tab" data-page="${i}" aria-selected="${i === 0}">${esc(p.name)}</button>`).join('')}
+          </div>
+          <div class="cmp-page"></div>
+        </section>
+      </div>`;
+  };
+
+  const initCompare = (w) => {
+    const sc = vBody.querySelector('.cmp-scroll');
+    const pages = comparePages(w, isMobile());
+    const pageBox = sc.querySelector('.cmp-page');
+    const section = sc.querySelector('.cmp-pages');
+    const showPage = (i, jump) => {
+      pageBox.innerHTML = pages[i].imgs.map((im) => imageTag(im.img, im, `${w.title} ${pages[i].name}`, false)).join('');
+      sc.querySelectorAll('[data-page]').forEach((b) => b.setAttribute('aria-selected', +b.dataset.page === i));
+      if (jump) sc.scrollTop = section.offsetTop;
+    };
+    section.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-page]');
+      if (b) showPage(+b.dataset.page, true);
+    });
+    showPage(0, false);
+
+    const track = sc.querySelector('.cmp-track');
+    if (!track) { cmpUpdate = null; return; }
+    const sticky = track.querySelector('.cmp-sticky');
+    const cols = [...sticky.querySelectorAll('.cmp-col')];
+    const strips = cols.map((c) => c.querySelector('.cmp-strip'));
+    const n = w.before.length;
+    const heights = (col, arr) => arr.slice(0, n).map((im) => col.clientWidth * im.h / im.w);
+    const sum = (a, k = a.length) => a.slice(0, k).reduce((x, y) => x + y, 0);
+    let segLen = [];
+    let total = 0;
+
+    const layout = () => {
+      const bH = heights(cols[0], w.before);
+      const aH = heights(cols[1], w.images);
+      segLen = bH.map((b, i) => Math.max(b, aH[i])); // 긴 쪽은 원래 속도로, 짧은 쪽은 맞춰서 천천히
+      total = sum(segLen);
+      track.style.height = `${total + MERGE_LEN + sc.clientHeight}px`;
+    };
+    const update = () => {
+      const s = sc.scrollTop;
+      const vh = sticky.clientHeight;
+      const m = Math.min(1, Math.max(0, (s - total) / MERGE_LEN));
+      sticky.style.setProperty('--m', m);
+      const hs = [heights(cols[0], w.before), heights(cols[1], w.images)];
+      hs.forEach((h, c) => {
+        const max = Math.max(0, sum(h) - vh);
+        let pos = max;
+        if (s < total) {
+          let i = 0;
+          while (i < n - 1 && s >= sum(segLen, i + 1)) i++;
+          const p = (s - sum(segLen, i)) / segLen[i];
+          pos = sum(h, i) + p * h[i];
+        }
+        strips[c].style.transform = `translateY(${-Math.min(max, Math.max(0, pos))}px)`;
+      });
+    };
+    layout();
+    update();
+    sc.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+    cmpUpdate = () => { layout(); update(); };
+  };
+  addEventListener('resize', () => cmpUpdate && cmpUpdate());
 
   const show = (idx) => {
     cur = (idx + list.length) % list.length;
@@ -83,11 +161,13 @@
       ? w.images.map((im) => imageTag(im.img, im, w.title)).join('')
       : imageTag(fullSrc(w), w, w.title);
     vBody.scrollTop = 0;
+    cmpUpdate = null;
+    if (w.before) initCompare(w);
   };
   const open = (works, idx) => {
     list = works;
+    viewer.classList.add('open'); // 먼저 보이게 해야 비교 화면이 폭을 잴 수 있음
     show(idx);
-    viewer.classList.add('open');
     document.body.classList.add('lock');
     viewer.querySelector('[data-act="close"]').focus();
   };
@@ -97,13 +177,6 @@
     vBody.innerHTML = '';
   };
   viewer.addEventListener('click', (e) => {
-    // 전/후 비교 탭 (모바일)
-    const tab = e.target.closest('[data-tab]');
-    if (tab) {
-      vBody.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', b === tab));
-      vBody.querySelectorAll('.cmp-col').forEach((c) => c.classList.toggle('is-on', c.dataset.col === tab.dataset.tab));
-      return;
-    }
     // 롱페이지: 기본은 줌아웃, 클릭하면 크게 (클릭한 위치 유지)
     const long = e.target.closest('img.is-long');
     if (long) {

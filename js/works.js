@@ -15,7 +15,8 @@
   - tags     : 메인에 보이는 작은 태그 (선택)
   - page     : 코드로 만든 페이지 경로 (선택, 전체 보기에서 이미지 대신 실제 페이지를 띄움)
   - images   : 한 프로젝트로 묶을 이미지 목록 (선택, 전체 보기에서 위아래로 이어서 보여줌)
-  - before   : 리뉴얼 전 이미지 목록 (선택, 전체 보기에서 전/후 두 창으로 비교, 모바일은 탭)
+  - before   : 리뉴얼 전 이미지 목록 (선택). images 앞쪽과 같은 페이지끼리 짝지어
+               전체 보기에서 좌우로 맞춰 스크롤하고, 끝나면 페이지별 탭 보기로 전환 (모바일은 탭만)
   - caseStudy: 케이스 스터디 항목 [제목, 내용] 목록 (선택, desc 대신 표시)
   - site     : 실제 사이트 주소 (선택, 케이스 스터디 아래 링크)
 */
@@ -33,22 +34,22 @@ window.WORKS = [
   {
     title: '비즈그리다 홈페이지 리뉴얼 & 디자인 시스템', cat: 'brand',
     img: 'assets/full/biz-main.jpg', thumb: 'assets/thumb/biz-main.jpg', w: 1440, h: 8587,
-    // 리뉴얼 전과 비교되게: 홈, 분석 & 리서치, 디자인 시스템, 나머지 서비스 페이지 순서
+    // 리뉴얼 후 페이지 (앞의 두 개는 리뉴얼 전과 짝지어 비교)
     images: [
-      { img: 'assets/full/biz-main.jpg', w: 1440, h: 8587 },
-      { img: 'assets/full/biz-research.jpg', w: 1440, h: 6082 },
-      { img: 'assets/full/biz-system.png', w: 1400, h: 11565 },
-      { img: 'assets/full/biz-targeting.jpg', w: 1440, h: 10018 },
-      { img: 'assets/full/biz-app.jpg', w: 1440, h: 5507 },
-      { img: 'assets/full/biz-elevator.jpg', w: 1440, h: 6995 },
-      { img: 'assets/full/biz-iptv.jpg', w: 1440, h: 6940 },
-      { img: 'assets/full/biz-live.jpg', w: 1440, h: 6360 },
-      { img: 'assets/full/biz-designservice.jpg', w: 1440, h: 9684 },
+      { name: '홈', img: 'assets/full/biz-main.jpg', w: 1440, h: 8587 },
+      { name: '분석 & 리서치', img: 'assets/full/biz-research.jpg', w: 1440, h: 6082 },
+      { name: '디자인 시스템', img: 'assets/full/biz-system.png', w: 1400, h: 11565 },
+      { name: '타겟 메시징', img: 'assets/full/biz-targeting.jpg', w: 1440, h: 10018 },
+      { name: '앱 패키지', img: 'assets/full/biz-app.jpg', w: 1440, h: 5507 },
+      { name: '엘리베이터 TV', img: 'assets/full/biz-elevator.jpg', w: 1440, h: 6995 },
+      { name: 'IPTV', img: 'assets/full/biz-iptv.jpg', w: 1440, h: 6940 },
+      { name: '라이브 커머스', img: 'assets/full/biz-live.jpg', w: 1440, h: 6360 },
+      { name: '디자인 서비스', img: 'assets/full/biz-designservice.jpg', w: 1440, h: 9684 },
     ],
-    // 리뉴얼 전 화면 (전체 보기에서 왼쪽 창, 모바일은 탭)
+    // 리뉴얼 전 화면: 위 images 앞쪽과 같은 순서로 짝지음
     before: [
-      { img: 'assets/full/biz-before-97.jpg', w: 1440, h: 10571 },
-      { img: 'assets/full/biz-before-121.jpg', w: 1440, h: 15177 },
+      { name: '홈', img: 'assets/full/biz-before-97.jpg', w: 1440, h: 10571 },
+      { name: '분석 & 리서치', img: 'assets/full/biz-before-121.jpg', w: 1440, h: 15177 },
     ],
     featured: 1,
     tags: ['홈페이지 리뉴얼', '디자인 시스템', '아임웹'],
