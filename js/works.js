@@ -82,7 +82,7 @@ window.WORKS = [
     title: '나노케어 알러브릭 침구', cat: 'detail',
     img: 'assets/full/detail-02.jpg', thumb: 'assets/thumb/detail-02.jpg', w: 966, h: 11615,
     featured: 5,
-    desc: '알러지 케어 기능을 강조한 침구 상세페이지. 차분한 화이트·네이비 톤에 기능 아이콘을 정리해 기능성 정보를 한눈에 읽히도록 구성했습니다.',
+    desc: '알러지 케어 기능을 강조한 침구 상세페이지. 차분한 화이트·네이비 톤으로 기능성 정보를 한눈에 읽히도록 구성했습니다.',
     tags: ['상세페이지', '리빙', '침구'],
   },
   { title: '블랭킷 상세페이지', cat: 'detail', img: 'assets/full/detail-03.jpg', thumb: 'assets/thumb/detail-03.jpg', w: 966, h: 16126 },
