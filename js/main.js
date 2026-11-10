@@ -46,8 +46,25 @@
   const vTitle = viewer.querySelector('.viewer-title');
   const vBody = viewer.querySelector('.viewer-body');
 
-  const imageTag = (src, w, title) =>
-    `<img src="${src}" alt="${esc(title)}" loading="lazy" width="${w.w}" height="${w.h}" style="--nat:${w.w * 2}px"${w.h / w.w > 4 ? ' class="is-long" title="클릭하면 크게 보기"' : ''}>`;
+  const imageTag = (src, w, title, zoom = true) =>
+    `<img src="${src}" alt="${esc(title)}" loading="lazy" width="${w.w}" height="${w.h}" style="--nat:${w.w * 2}px"${zoom && w.h / w.w > 4 ? ' class="is-long" title="클릭하면 크게 보기"' : ''}>`;
+
+  // 리뉴얼 전/후 비교: PC는 좌우 두 창, 모바일은 탭
+  const compareTag = (w) => `
+    <div class="cmp-tabs" role="tablist">
+      <button role="tab" data-tab="before" aria-selected="true">리뉴얼 전</button>
+      <button role="tab" data-tab="after" aria-selected="false">리뉴얼 후</button>
+    </div>
+    <div class="cmp">
+      <section class="cmp-col is-on" data-col="before">
+        <p class="cmp-label">리뉴얼 전</p>
+        ${w.before.map((im) => imageTag(im.img, im, `${w.title} 리뉴얼 전`, false)).join('')}
+      </section>
+      <section class="cmp-col" data-col="after">
+        <p class="cmp-label">리뉴얼 후</p>
+        ${w.images.map((im) => imageTag(im.img, im, `${w.title} 리뉴얼 후`, false)).join('')}
+      </section>
+    </div>`;
 
   const show = (idx) => {
     cur = (idx + list.length) % list.length;
@@ -55,7 +72,10 @@
     vTitle.innerHTML = `${esc(w.title)}<span>${catLabel(w.cat)} · ${cur + 1} / ${list.length}</span>`;
     vBody.classList.toggle('is-video', !!w.video);
     vBody.classList.toggle('is-page', !!w.page);
-    vBody.innerHTML = w.page
+    vBody.classList.toggle('is-compare', !!w.before);
+    vBody.innerHTML = w.before
+      ? compareTag(w)
+      : w.page
       ? `<iframe src="${w.page}" title="${esc(w.title)}"></iframe>`
       : w.video
       ?`<video src="${videoSrc(w)}" poster="${fullSrc(w)}" controls autoplay playsinline></video>`
@@ -77,6 +97,13 @@
     vBody.innerHTML = '';
   };
   viewer.addEventListener('click', (e) => {
+    // 전/후 비교 탭 (모바일)
+    const tab = e.target.closest('[data-tab]');
+    if (tab) {
+      vBody.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', b === tab));
+      vBody.querySelectorAll('.cmp-col').forEach((c) => c.classList.toggle('is-on', c.dataset.col === tab.dataset.tab));
+      return;
+    }
     // 롱페이지: 기본은 줌아웃, 클릭하면 크게 (클릭한 위치 유지)
     const long = e.target.closest('img.is-long');
     if (long) {

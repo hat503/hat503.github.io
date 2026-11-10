@@ -15,6 +15,7 @@
   - tags     : 메인에 보이는 작은 태그 (선택)
   - page     : 코드로 만든 페이지 경로 (선택, 전체 보기에서 이미지 대신 실제 페이지를 띄움)
   - images   : 한 프로젝트로 묶을 이미지 목록 (선택, 전체 보기에서 위아래로 이어서 보여줌)
+  - before   : 리뉴얼 전 이미지 목록 (선택, 전체 보기에서 전/후 두 창으로 비교, 모바일은 탭)
   - caseStudy: 케이스 스터디 항목 [제목, 내용] 목록 (선택, desc 대신 표시)
   - site     : 실제 사이트 주소 (선택, 케이스 스터디 아래 링크)
 */
@@ -43,6 +44,11 @@ window.WORKS = [
       { img: 'assets/full/biz-live.jpg', w: 1440, h: 6360 },
       { img: 'assets/full/biz-research.jpg', w: 1440, h: 6082 },
       { img: 'assets/full/biz-designservice.jpg', w: 1440, h: 9684 },
+    ],
+    // 리뉴얼 전 화면 (전체 보기에서 왼쪽 창, 모바일은 탭)
+    before: [
+      { img: 'assets/full/biz-before-97.jpg', w: 1440, h: 10571 },
+      { img: 'assets/full/biz-before-121.jpg', w: 1440, h: 15177 },
     ],
     featured: 1,
     tags: ['홈페이지 리뉴얼', '디자인 시스템', '아임웹'],
