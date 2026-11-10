@@ -33,16 +33,16 @@ window.WORKS = [
   {
     title: '비즈그리다 홈페이지 리뉴얼 & 디자인 시스템', cat: 'brand',
     img: 'assets/full/biz-main.jpg', thumb: 'assets/thumb/biz-main.jpg', w: 1440, h: 8587,
-    // 홈, 디자인 시스템, 서비스 페이지 순서
+    // 리뉴얼 전과 비교되게: 홈, 분석 & 리서치, 디자인 시스템, 나머지 서비스 페이지 순서
     images: [
       { img: 'assets/full/biz-main.jpg', w: 1440, h: 8587 },
+      { img: 'assets/full/biz-research.jpg', w: 1440, h: 6082 },
       { img: 'assets/full/biz-system.png', w: 1400, h: 11565 },
       { img: 'assets/full/biz-targeting.jpg', w: 1440, h: 10018 },
       { img: 'assets/full/biz-app.jpg', w: 1440, h: 5507 },
       { img: 'assets/full/biz-elevator.jpg', w: 1440, h: 6995 },
       { img: 'assets/full/biz-iptv.jpg', w: 1440, h: 6940 },
       { img: 'assets/full/biz-live.jpg', w: 1440, h: 6360 },
-      { img: 'assets/full/biz-research.jpg', w: 1440, h: 6082 },
       { img: 'assets/full/biz-designservice.jpg', w: 1440, h: 9684 },
     ],
     // 리뉴얼 전 화면 (전체 보기에서 왼쪽 창, 모바일은 탭)
