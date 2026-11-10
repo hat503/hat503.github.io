@@ -62,7 +62,7 @@ window.WORKS = [
     page: 'works/rxpert/index.html', // 실제 코드로 만든 페이지 (전체 보기에서 그대로 실행)
     img: 'assets/full/landing-05.jpg', thumb: 'assets/thumb/landing-05-mockup.jpg', w: 1268, h: 19644,
     featured: 2,
-    desc: '알엑스퍼트의 브랜드를 소개하는 랜딩페이지. 기획부터 바이브 코딩을 통한 웹 구현까지 직접 진행했으며 LMS 광고 페이지의 특성을 고려하여 모바일을 기준으로 작업했습니다.',
+    desc: '알엑스퍼트의 브랜드를 소개하는 랜딩페이지. 바이브코딩을 통하여 웹으로 구현해냈으며 LMS 광고 페이지의 특성을 고려하여 모바일을 기준으로 작업했습니다.',
     tags: ['랜딩페이지', '웹퍼블리싱', '바이브코딩', '뷰티'],
   },
   { title: '관악365치과의원 임플란트', cat: 'landing', img: 'assets/full/landing-01.png', thumb: 'assets/thumb/landing-01.jpg', w: 1000, h: 7060 },
